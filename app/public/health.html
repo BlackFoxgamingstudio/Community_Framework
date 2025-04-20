@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Health & Wellness - RawFuelFoods</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/nav-styles.css">
+  <style>
+    .hero {
+      background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+                  url('images/wellness.jpg');
+      background-size: cover;
+      background-position: center;
+      color: white;
+      padding: 6rem 0;
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+
+    .hero h1 {
+      font-size: 3.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .hero p {
+      font-size: 1.2rem;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .wellness-section {
+      padding: 4rem 0;
+    }
+
+    .wellness-section:nth-child(even) {
+      background: #f8f9fa;
+    }
+
+    .wellness-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .wellness-card {
+      background: white;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      transition: transform 0.2s ease;
+    }
+
+    .wellness-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .wellness-card h3 {
+      color: #2c3e50;
+      margin-bottom: 1rem;
+    }
+
+    .wellness-card p {
+      color: #666;
+      margin-bottom: 1.5rem;
+    }
+
+    .wellness-card ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .wellness-card ul li {
+      margin-bottom: 0.5rem;
+      padding-left: 1.5rem;
+      position: relative;
+    }
+
+    .wellness-card ul li:before {
+      content: "•";
+      color: #2c3e50;
+      position: absolute;
+      left: 0;
+    }
+
+    .cta-button {
+      display: inline-block;
+      padding: 0.75rem 1.5rem;
+      background: #2c3e50;
+      color: white;
+      text-decoration: none;
+      border-radius: 4px;
+      transition: background 0.2s ease;
+    }
+
+    .cta-button:hover {
+      background: #34495e;
+    }
+
+    .program-section {
+      text-align: center;
+      padding: 4rem 0;
+      background: #f8f9fa;
+    }
+
+    .program-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .program-card {
+      background: white;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    @media (max-width: 768px) {
+      .hero h1 {
+        font-size: 2.5rem;
+      }
+
+      .wellness-section {
+        padding: 2rem 0;
+      }
+
+      .wellness-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="main-nav">
+    <div class="nav-brand">
+        <a href="/" class="logo">RawFuelFoods</a>
+        <button class="nav-toggle" aria-label="Toggle Navigation">
+            <span class="hamburger"></span>
+        </button>
+    </div>
+    
+    <ul class="nav-menu">
+        <li class="nav-item">
+            <a href="/about" class="nav-link">About & Contact</a>
+        </li>
+        <li class="nav-item">
+          <a href="/data-hub" class="nav-link active">Data Hub</a>
+      </li>
+        <li class="nav-item dropdown">
+            <a href="/farm" class="nav-link">Farms <i class="fas fa-chevron-down"></i></a>
+            <ul class="dropdown-menu">
+                <li><a href="/farms/locations">Locations</a></li>
+                <li><a href="/farms/products">Products</a></li>
+                <li><a href="/farms/sustainability">Sustainability</a></li>
+                <li><a href="/farms/partners">Partners</a></li>
+            </ul>
+        </li>
+       
+        <li class="nav-item dropdown">
+            <a href="/health-wellness" class="nav-link">Health/Wellness <i class="fas fa-chevron-down"></i></a>
+            <ul class="dropdown-menu">
+                <li><a href="/health-wellness/programs">Programs</a></li>
+                <li><a href="/health-wellness/nutrition">Nutrition</a></li>
+                <li><a href="/health-wellness/coaching">Coaching</a></li>
+                <li><a href="/health-wellness/resources">Resources</a></li>
+                <li><a href="/eat-drink/menu">Menu</a></li>
+                <li><a href="/eat-drink/specials">Daily Specials</a></li>
+                <li><a href="/eat-drink/catering">Catering</a></li>
+                <li><a href="/eat-drink/events">Events</a></li>
+            </ul>
+        </li>
+   
+       
+        <li class="nav-item dropdown">
+            <a href="/networks" class="nav-link">Networks <i class="fas fa-chevron-down"></i></a>
+            <ul class="dropdown-menu">
+                <li><a href="/networks/partners">Partners</a></li>
+                <li><a href="/networks/community">Community</a></li>
+                <li><a href="/networks/initiatives">Initiatives</a></li>
+                <a href="/communications" class="nav-link">Communications</a>
+                <li><a href="/events/calendar">Calendar</a></li>
+                <li><a href="/events/workshops">Workshops</a></li>
+                <li><a href="/events/classes">Classes</a></li>
+                <li><a href="/events/special">Special Events</a></li>
+                <a href="/outdoors-rx" class="nav-link">Outdoors RX</a>
+
+            </ul>
+        </li>
+     
+      
+        <li class="nav-item dropdown">
+          <a href="/pdf-library-docs" class="nav-link">Lib of kemet docs <i class="fas fa-chevron-down"></i></a>
+          <ul class="dropdown-menu">
+              <li><a href="/events/calendar">Calendar</a></li>
+              <li><a href="/events/workshops">Workshops</a></li>
+              <li><a href="/events/classes">Classes</a></li>
+              <li><a href="/events/special">Special Events</a></li>
+              <a href="/blog" class="nav-link">Blog</a>
+
+          </ul>
+      </li>
+        </ul>
+      
+      </nav>
+
+
+  <main class="main-content">
+    <section class="hero">
+      <div class="container">
+        <h1>Health & Wellness</h1>
+        <p>Empowering healthy living through plant-based nutrition and holistic wellness practices</p>
+      </div>
+    </section>
+
+    <section class="wellness-section container">
+      <h2>Our Wellness Philosophy</h2>
+      <p>At RawFuelFoods, we believe in a holistic approach to health and wellness that encompasses nutrition, physical activity, and mental well-being. Our programs and services are designed to help you achieve optimal health through plant-based nutrition and sustainable lifestyle practices.</p>
+      
+      <div class="wellness-grid">
+        <div class="wellness-card">
+          <h3>Nutrition</h3>
+          <p>Understanding the power of whole, plant-based foods for optimal health.</p>
+          <ul>
+            <li>Plant-based nutrition guidance</li>
+            <li>Meal planning support</li>
+            <li>Dietary transition coaching</li>
+          </ul>
+          <a href="/health-wellness/nutrition" class="cta-button">Learn More</a>
+        </div>
+
+        <div class="wellness-card">
+          <h3>Physical Activity</h3>
+          <p>Incorporating movement and exercise for overall wellbeing.</p>
+          <ul>
+            <li>Outdoor fitness programs</li>
+            <li>Urban farming activities</li>
+            <li>Movement workshops</li>
+          </ul>
+          <a href="/health-wellness/programs" class="cta-button">View Programs</a>
+        </div>
+
+        <div class="wellness-card">
+          <h3>Mental Wellness</h3>
+          <p>Supporting mental health through nutrition and lifestyle choices.</p>
+          <ul>
+            <li>Stress management techniques</li>
+            <li>Mindfulness practices</li>
+            <li>Community support</li>
+          </ul>
+          <a href="/health-wellness/resources" class="cta-button">Explore Resources</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="program-section">
+      <div class="container">
+        <h2>Wellness Programs</h2>
+        <p>Join our comprehensive wellness programs designed to support your health journey</p>
+        
+        <div class="program-grid">
+          <div class="program-card">
+            <h3>Nutrition Consultations</h3>
+            <p>One-on-one guidance for your plant-based journey</p>
+            <a href="/health-wellness/coaching" class="cta-button">Schedule Now</a>
+          </div>
+
+          <div class="program-card">
+            <h3>Group Workshops</h3>
+            <p>Learn and grow with our community</p>
+            <a href="/events/workshops" class="cta-button">View Schedule</a>
+          </div>
+
+          <div class="program-card">
+            <h3>Wellness Resources</h3>
+            <p>Access our library of health and wellness materials</p>
+            <a href="/health-wellness/resources" class="cta-button">Browse Resources</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>Contact: Call 206.718.9951 | rawfuelfoods@gmail.com</p>
+    </div>
+  </footer>
+
+  <script src="js/nav.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
+</body>
+</html> 

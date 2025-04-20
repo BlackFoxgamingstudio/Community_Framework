@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document Upload Test</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      line-height: 1.6;
+    }
+    .container {
+      background: #f5f5f5;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+    }
+    .form-group {
+      margin-bottom: 15px;
+    }
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+    button {
+      background: #2c3e50;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #34495e;
+    }
+    .error {
+      background: #f8d7da;
+      color: #721c24;
+      padding: 10px;
+      border-radius: 4px;
+      margin-bottom: 15px;
+      display: none;
+    }
+    .success {
+      background: #d4edda;
+      color: #155724;
+      padding: 10px;
+      border-radius: 4px;
+      margin-bottom: 15px;
+      display: none;
+    }
+    .log {
+      background: #333;
+      color: #fff;
+      padding: 10px;
+      border-radius: 4px;
+      height: 300px;
+      overflow-y: auto;
+      margin-top: 20px;
+      font-family: monospace;
+    }
+  </style>
+</head>
+<body>
+  <h1>Document Upload Test</h1>
+  
+  <div class="container">
+    <div id="error" class="error"></div>
+    <div id="success" class="success"></div>
+    
+    <form id="uploadForm">
+      <div class="form-group">
+        <label for="title">Title</label>
+        <input type="text" id="title" name="title" required>
+      </div>
+      
+      <div class="form-group">
+        <label for="type">Type</label>
+        <select id="type" name="type" required>
+          <option value="research">Research Paper</option>
+          <option value="guides">Farming Guide</option>
+          <option value="historical">Historical Document</option>
+        </select>
+      </div>
+      
+      <div class="form-group">
+        <label for="description">Description</label>
+        <textarea id="description" name="description" rows="4" required></textarea>
+      </div>
+      
+      <div class="form-group">
+        <label for="file">PDF File</label>
+        <input type="file" id="file" name="file" accept=".pdf" required>
+      </div>
+      
+      <button type="submit">Upload Document</button>
+    </form>
+  </div>
+  
+  <div class="container">
+    <h2>Console Log</h2>
+    <div id="log" class="log"></div>
+  </div>
+  
+  <script>
+    // DOM Elements
+    const form = document.getElementById('uploadForm');
+    const errorDiv = document.getElementById('error');
+    const successDiv = document.getElementById('success');
+    const logDiv = document.getElementById('log');
+    
+    // API Base URL
+    const API_BASE_URL = 'http://localhost:3000';
+    
+    // Helper Functions
+    function logMessage(message, type = 'info') {
+      const timestamp = new Date().toLocaleTimeString();
+      const logEntry = document.createElement('div');
+      logEntry.className = type;
+      logEntry.textContent = `[${timestamp}] ${message}`;
+      logDiv.appendChild(logEntry);
+      logDiv.scrollTop = logDiv.scrollHeight;
+    }
+    
+    function showError(message) {
+      errorDiv.textContent = message;
+      errorDiv.style.display = 'block';
+      successDiv.style.display = 'none';
+      logMessage(message, 'error');
+    }
+    
+    function showSuccess(message) {
+      successDiv.textContent = message;
+      successDiv.style.display = 'block';
+      errorDiv.style.display = 'none';
+      logMessage(message, 'success');
+    }
+    
+    // Handle Form Submission
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      
+      errorDiv.style.display = 'none';
+      successDiv.style.display = 'none';
+      
+      try {
+        const formData = new FormData(form);
+        logMessage('Preparing to upload document...');
+        
+        // Validate inputs
+        const title = formData.get('title');
+        const type = formData.get('type');
+        const description = formData.get('description');
+        const file = formData.get('file');
+        
+        if (!title || !type || !description) {
+          throw new Error('Please fill in all required fields');
+        }
+        
+        if (!file || file.size === 0) {
+          throw new Error('Please select a PDF file to upload');
+        }
+        
+        logMessage(`File selected: ${file.name} (${(file.size / 1024).toFixed(2)} KB)`);
+        
+        // Upload document
+        logMessage('Uploading document to server...');
+        
+        const response = await fetch(`${API_BASE_URL}/api/documents`, {
+          method: 'POST',
+          body: formData
+        });
+        
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.error || 'Failed to upload document');
+        }
+        
+        const result = await response.json();
+        logMessage(`Upload successful! Document ID: ${result.id}`);
+        showSuccess('Document uploaded successfully');
+        
+        // Reset form
+        form.reset();
+        
+      } catch (error) {
+        showError(`Error: ${error.message}`);
+      }
+    });
+    
+    // Initial log message
+    logMessage('Upload test page loaded successfully');
+  </script>
+</body>
+</html> 

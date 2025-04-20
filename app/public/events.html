@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Events - RawFuelFoods</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    .page-header {
+      background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+                  url('images/FARMS Feature Panel.png');
+      background-size: cover;
+      background-position: center;
+      color: white;
+      padding: 6rem 0;
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+
+    .page-header h1 {
+      font-size: 3.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .page-header p {
+      font-size: 1.2rem;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .events-section {
+      padding: 4rem 0;
+      background: #f8f9fa;
+    }
+
+    .events-description {
+      max-width: 800px;
+      margin: 0 auto 3rem;
+      text-align: center;
+    }
+
+    .event-card {
+      display: flex;
+      background: white;
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 2rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .event-date {
+      background: #2c3e50;
+      color: white;
+      padding: 1.5rem;
+      text-align: center;
+      min-width: 120px;
+    }
+
+    .event-content {
+      padding: 1.5rem;
+      flex-grow: 1;
+    }
+
+    .event-image {
+      width: 100%;
+      max-width: 800px;
+      margin: 2rem auto;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 0.5rem 1rem;
+      background: #2c3e50;
+      color: white;
+      text-decoration: none;
+      border-radius: 4px;
+      margin-top: 1rem;
+    }
+
+    .btn:hover {
+      background: #34495e;
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <a href="index.html" class="logo">RawFuel<span>Foods</span></a>
+      <button id="nav-toggle" class="nav-toggle">☰</button>
+      <nav id="nav-menu" class="nav-menu">
+        <ul>
+          <li><a href="about.html">About & Contact</a></li>
+          <li><a href="farm.html">Farms</a></li>
+          <li><a href="food.html">Eat & Drink</a></li>
+          <li><a href="health.html">Health/Wellness</a></li>
+          <li><a href="data-hub.html">Data Hub</a></li>
+          <li><a href="communications.html">Communications</a></li>
+          <li><a href="networks.html">Networks</a></li>
+          <li><a href="blog.html">Blog</a></li>
+          <li><a href="outdoors-rx.html">Outdoors RX</a></li>
+          <li><a href="events.html" class="active">Events</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <div class="page-header">
+      <h1>Upcoming Events</h1>
+      <p>Join our vibrant community for workshops, seminars, and engaging gatherings focused on sustainable urban farming and healthy living</p>
+      <p>Experience hands-on learning opportunities and connect with fellow enthusiasts in our state-of-the-art urban farming facilities</p>
+    </div>
+
+    <section class="events-section">
+      <div class="container">
+        <div class="events-description">
+          <h2>Featured Events</h2>
+          <p>Our events program offers a diverse range of activities designed to educate, inspire, and build community around sustainable urban farming practices. From hands-on workshops to expert-led seminars, each event provides valuable insights and practical skills for participants at all experience levels.</p>
+          <p>Throughout the year, we host regular workshops, training sessions, and community gatherings that focus on various aspects of urban farming, sustainable living, and plant-based nutrition. These events serve as platforms for knowledge sharing, networking, and fostering meaningful connections within our community.</p>
+        </div>
+        <img src="images/urbanfarming.png" alt="Urban Farming Workshop" class="event-image">
+        <div class="events-list" id="eventsList">
+          <!-- Events will be loaded here dynamically -->
+          <div class="loading">Loading events...</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="workshop-highlights container">
+      <h2>Workshop Highlights</h2>
+      <p>Our workshops cover a wide range of topics essential for successful urban farming and sustainable living. Led by experienced practitioners and industry experts, these sessions provide both theoretical knowledge and practical skills that participants can immediately apply to their own projects.</p>
+      <p>From basic gardening techniques to advanced urban farming technologies, our curriculum is designed to meet the needs of diverse learners. Each workshop includes hands-on activities, detailed resources, and ongoing support to ensure participants can successfully implement what they've learned.</p>
+      <img src="images/FARMS Feature Panel.png" alt="Workshop Session" class="event-image">
+    </section>
+  </main>
+
+  <footer class="site-footer container">
+    <p>Call 206.718.9951 | rawfuelfoods@gmail.com</p>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script>
+    // Load events
+    async function loadEvents() {
+      try {
+        const response = await fetch('/api/events');
+        const events = await response.json();
+        
+        const eventsList = document.getElementById('eventsList');
+        eventsList.innerHTML = events.map(event => {
+          const date = new Date(event.event_date);
+          return `
+            <article class="event-card">
+              <div class="event-date">
+                <div class="day">${date.getDate()}</div>
+                <div class="month">${date.toLocaleString('default', { month: 'short' })}</div>
+                <div class="year">${date.getFullYear()}</div>
+              </div>
+              <div class="event-content">
+                <h3>${event.title}</h3>
+                <p>${event.description || ''}</p>
+                ${event.link ? `<a href="${event.link}" class="btn" target="_blank">Learn More</a>` : ''}
+              </div>
+            </article>
+          `;
+        }).join('');
+
+        if (events.length === 0) {
+          eventsList.innerHTML = '<p>No upcoming events scheduled. Check back soon!</p>';
+        }
+      } catch (error) {
+        document.getElementById('eventsList').innerHTML = '<p>Error loading events. Please try again later.</p>';
+      }
+    }
+
+    // Load events when page loads
+    window.addEventListener('load', loadEvents);
+  </script>
+</body>
+</html> 

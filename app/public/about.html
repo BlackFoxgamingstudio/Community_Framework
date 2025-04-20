@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About & Contact - RawFuelFoods</title>
+  <style>
+    .hero {
+      background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+                  url('images/FARMS Feature Panel.png');
+      background-size: cover;
+      background-position: center;
+      color: white;
+      padding: 6rem 0;
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+
+    .hero h1 {
+      font-size: 3.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .hero p {
+      font-size: 1.2rem;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .content-section {
+      padding: 4rem 0;
+    }
+
+    .content-section:nth-child(even) {
+      background: #f8f9fa;
+    }
+
+    .section-image {
+      width: 100%;
+      max-width: 800px;
+      margin: 2rem auto;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      display: block;
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .contact-card {
+      background: white;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .contact-form {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: bold;
+    }
+
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 0.5rem;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 0.75rem 1.5rem;
+      background: #2c3e50;
+      color: white;
+      text-decoration: none;
+      border-radius: 4px;
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn:hover {
+      background: #34495e;
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <link rel="stylesheet" href="css/nav-styles.css">
+    <nav class="main-nav">
+      <div class="nav-brand">
+          <a href="/" class="logo">RawFuelFoods</a>
+          <button class="nav-toggle" aria-label="Toggle Navigation">
+              <span class="hamburger"></span>
+          </button>
+      </div>
+      
+      <ul class="nav-menu">
+          <li class="nav-item">
+              <a href="/about" class="nav-link">About & Contact</a>
+          </li>
+          <li class="nav-item">
+            <a href="/data-hub" class="nav-link active">Data Hub</a>
+        </li>
+          <li class="nav-item dropdown">
+              <a href="/farm" class="nav-link">Farms <i class="fas fa-chevron-down"></i></a>
+              <ul class="dropdown-menu">
+                  <li><a href="/farms/locations">Locations</a></li>
+                  <li><a href="/farms/products">Products</a></li>
+                  <li><a href="/farms/sustainability">Sustainability</a></li>
+                  <li><a href="/farms/partners">Partners</a></li>
+              </ul>
+          </li>
+         
+          <li class="nav-item dropdown">
+              <a href="/health-wellness" class="nav-link">Health/Wellness <i class="fas fa-chevron-down"></i></a>
+              <ul class="dropdown-menu">
+                  <li><a href="/health-wellness/programs">Programs</a></li>
+                  <li><a href="/health-wellness/nutrition">Nutrition</a></li>
+                  <li><a href="/health-wellness/coaching">Coaching</a></li>
+                  <li><a href="/health-wellness/resources">Resources</a></li>
+                  <li><a href="/eat-drink/menu">Menu</a></li>
+                  <li><a href="/eat-drink/specials">Daily Specials</a></li>
+                  <li><a href="/eat-drink/catering">Catering</a></li>
+                  <li><a href="/eat-drink/events">Events</a></li>
+              </ul>
+          </li>
+     
+         
+          <li class="nav-item dropdown">
+              <a href="/networks" class="nav-link">Networks <i class="fas fa-chevron-down"></i></a>
+              <ul class="dropdown-menu">
+                  <li><a href="/networks/partners">Partners</a></li>
+                  <li><a href="/networks/community">Community</a></li>
+                  <li><a href="/networks/initiatives">Initiatives</a></li>
+                  <a href="/communications" class="nav-link">Communications</a>
+                  <li><a href="/events/calendar">Calendar</a></li>
+                  <li><a href="/events/workshops">Workshops</a></li>
+                  <li><a href="/events/classes">Classes</a></li>
+                  <li><a href="/events/special">Special Events</a></li>
+                  <a href="/outdoors-rx" class="nav-link">Outdoors RX</a>
+  
+              </ul>
+          </li>
+       
+        
+          <li class="nav-item dropdown">
+            <a href="/pdf-library-docs" class="nav-link">Lib of kemet docs <i class="fas fa-chevron-down"></i></a>
+            <ul class="dropdown-menu">
+                <li><a href="/events/calendar">Calendar</a></li>
+                <li><a href="/events/workshops">Workshops</a></li>
+                <li><a href="/events/classes">Classes</a></li>
+                <li><a href="/events/special">Special Events</a></li>
+                <a href="/blog" class="nav-link">Blog</a>
+  
+            </ul>
+        </li>
+          </ul>
+        
+        </nav>
+  
+  </header>
+
+  <main class="main-content">
+    <section class="hero">
+      <div class="container">
+        <h1>About RawFuelFoods</h1>
+        <p>Pioneering sustainable urban farming and healthy living in our communities</p>
+      </div>
+    </section>
+
+    <section class="content-section">
+      <div class="container">
+        <h2>Our Mission</h2>
+        <p>At RawFuelFoods, we are dedicated to revolutionizing urban agriculture through innovative farming practices and sustainable food production. Our mission is to create a more resilient and healthy food system by bringing farming directly into urban communities. Through our network of urban farms, we're not just growing food – we're cultivating a movement towards sustainable living and community wellness.</p>
+        <p>Founded on the principles of sustainability, education, and community engagement, RawFuelFoods has grown from a single urban farm to a comprehensive ecosystem that includes farming operations, educational programs, and wellness initiatives. We believe that access to fresh, nutritious food is a fundamental right, and we work tirelessly to make this vision a reality through our various programs and services.</p>
+        <img src="images/FARMS Feature Panel.png" alt="Urban Farming Initiative" class="section-image">
+      </div>
+    </section>
+
+    <section class="content-section">
+      <div class="container">
+        <h2>Our Approach</h2>
+        <p>Our innovative approach combines traditional farming wisdom with cutting-edge technology and data-driven insights. We utilize advanced urban farming techniques, including vertical farming, hydroponics, and aquaponics, to maximize food production in limited urban spaces. Our methods not only yield high-quality, nutritious produce but also demonstrate the viability of sustainable urban agriculture as a solution to food security challenges.</p>
+        <p>Through our comprehensive data collection and analysis system, we continuously refine our farming practices and share our findings with the broader urban farming community. This commitment to innovation and knowledge sharing has established RawFuelFoods as a leader in the urban agriculture movement, inspiring similar initiatives across the country.</p>
+        <img src="images/farmyield.png" alt="Sustainable Farming Practices" class="section-image">
+      </div>
+    </section>
+
+    <section class="content-section">
+      <div class="container">
+        <h2>Contact Us</h2>
+        <div class="contact-grid">
+          <div class="contact-card">
+            <h3>Get in Touch</h3>
+            <p>Have questions about our programs or interested in partnering with us? We'd love to hear from you!</p>
+            <p>Phone: 206.718.9951</p>
+            <p>Email: rawfuelfoods@gmail.com</p>
+          </div>
+          <div class="contact-card">
+            <h3>Visit Us</h3>
+            <p>Experience our urban farming operations firsthand and learn about our sustainable practices.</p>
+            <p>Schedule a visit to one of our farm locations or attend our regular community events.</p>
+          </div>
+        </div>
+        <form class="contact-form" id="contactForm">
+          <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" required>
+          </div>
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required>
+          </div>
+          <div class="form-group">
+            <label for="message">Message</label>
+            <textarea id="message" name="message" rows="5" required></textarea>
+          </div>
+          <button type="submit" class="btn">Send Message</button>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer container">
+    <p>Call 206.718.9951 | rawfuelfoods@gmail.com</p>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html> 

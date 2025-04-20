@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Library of Kemet - Document Uploader</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background: #f5f5f5;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    
+    .header {
+      background: #2c3e50;
+      color: white;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    
+    .header h1 {
+      margin: 0;
+    }
+    
+    .container {
+      background: white;
+      border-radius: 8px;
+      padding: 30px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      margin-bottom: 30px;
+    }
+    
+    h2 {
+      color: #2c3e50;
+      margin-top: 0;
+      border-bottom: 2px solid #f0f2f5;
+      padding-bottom: 10px;
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 5px;
+      color: #2c3e50;
+    }
+    
+    input, select, textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 16px;
+    }
+    
+    textarea {
+      min-height: 100px;
+    }
+    
+    button {
+      background: #2c3e50;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background 0.3s;
+    }
+    
+    button:hover {
+      background: #34495e;
+    }
+    
+    #message {
+      padding: 15px;
+      border-radius: 4px;
+      margin: 20px 0;
+      display: none;
+    }
+    
+    .success {
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+    
+    .error {
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+    
+    .document-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+    }
+    
+    .document-card {
+      background: white;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    
+    .document-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    
+    .document-thumbnail {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .document-info {
+      padding: 20px;
+    }
+    
+    .document-title {
+      margin: 0 0 10px 0;
+      color: #2c3e50;
+      font-size: 18px;
+    }
+    
+    .document-meta {
+      display: flex;
+      justify-content: space-between;
+      color: #6c757d;
+      font-size: 0.9em;
+      margin-bottom: 15px;
+    }
+    
+    .document-description {
+      color: #495057;
+      margin-bottom: 15px;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    
+    .document-actions {
+      display: flex;
+      justify-content: space-between;
+      border-top: 1px solid #eee;
+      padding-top: 15px;
+    }
+    
+    .document-actions a {
+      color: #2c3e50;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      transition: color 0.3s;
+    }
+    
+    .document-actions a:hover {
+      color: #3498db;
+    }
+    
+    @media (max-width: 768px) {
+      .document-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .nav-links {
+      margin-top: 30px;
+      text-align: center;
+    }
+    
+    .nav-links a {
+      display: inline-block;
+      margin: 0 10px;
+      color: #2c3e50;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    
+    .nav-links a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>Library of Kemet - Document Management</h1>
+  </div>
+  
+  <div class="container">
+    <h2>Upload New Document</h2>
+    
+    <form id="uploadForm">
+      <div class="form-group">
+        <label for="title">Document Title</label>
+        <input type="text" id="title" name="title" required>
+      </div>
+      
+      <div class="form-group">
+        <label for="type">Document Type</label>
+        <select id="type" name="type" required>
+          <option value="research">Research Paper</option>
+          <option value="guides">Farming Guide</option>
+          <option value="historical">Historical Document</option>
+        </select>
+      </div>
+      
+      <div class="form-group">
+        <label for="description">Description</label>
+        <textarea id="description" name="description" required></textarea>
+      </div>
+      
+      <div class="form-group">
+        <label for="file">PDF File</label>
+        <input type="file" id="file" name="file" accept=".pdf" required>
+      </div>
+      
+      <button type="submit">Upload Document</button>
+    </form>
+    
+    <div id="message"></div>
+  </div>
+  
+  <div class="container">
+    <h2>Library Documents</h2>
+    <div id="documentGrid" class="document-grid"></div>
+  </div>
+  
+  <div class="nav-links">
+    <a href="/data-hub">Back to Data Hub</a>
+    <a href="/">Home</a>
+  </div>
+
+  <script>
+    // API Base URL
+    const API_BASE_URL = 'http://localhost:3000';
+    
+    // DOM Elements
+    const form = document.getElementById('uploadForm');
+    const message = document.getElementById('message');
+    const documentGrid = document.getElementById('documentGrid');
+    
+    // Add event listener to the form
+    form.addEventListener('submit', handleSubmit);
+    
+    // Load documents when the page loads
+    document.addEventListener('DOMContentLoaded', loadDocuments);
+    
+    // Handle form submission
+    async function handleSubmit(event) {
+      event.preventDefault();
+      
+      // Reset message
+      message.style.display = 'none';
+      message.textContent = '';
+      message.className = '';
+      
+      // Get form data
+      const formData = new FormData(form);
+      
+      try {
+        // Validate inputs
+        const title = formData.get('title');
+        const type = formData.get('type');
+        const description = formData.get('description');
+        const file = formData.get('file');
+        
+        if (!title || !type || !description) {
+          throw new Error('Please fill in all required fields');
+        }
+        
+        if (!file || file.size === 0) {
+          throw new Error('Please select a PDF file to upload');
+        }
+        
+        if (file.type !== 'application/pdf') {
+          throw new Error('Only PDF files are allowed');
+        }
+        
+        // Disable submit button during upload
+        const submitButton = form.querySelector('button[type="submit"]');
+        submitButton.disabled = true;
+        submitButton.textContent = 'Uploading...';
+        
+        console.log('Starting upload...');
+        console.log('File:', file.name, file.size, file.type);
+        
+        // Upload document
+        const response = await fetch(`${API_BASE_URL}/api/documents`, {
+          method: 'POST',
+          body: formData
+        });
+        
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.error || 'Failed to upload document');
+        }
+        
+        const result = await response.json();
+        console.log('Upload successful:', result);
+        
+        // Display success message
+        message.textContent = 'Document uploaded successfully!';
+        message.className = 'success';
+        message.style.display = 'block';
+        
+        // Reset form
+        form.reset();
+        
+        // Reload documents
+        await loadDocuments();
+      } catch (error) {
+        console.error('Upload error:', error);
+        
+        // Display error message
+        message.textContent = `Error: ${error.message}`;
+        message.className = 'error';
+        message.style.display = 'block';
+      } finally {
+        // Re-enable submit button
+        const submitButton = form.querySelector('button[type="submit"]');
+        submitButton.disabled = false;
+        submitButton.textContent = 'Upload Document';
+      }
+    }
+    
+    // Load and display documents
+    async function loadDocuments() {
+      try {
+        console.log('Loading documents...');
+        const response = await fetch(`${API_BASE_URL}/api/documents`);
+        
+        if (!response.ok) {
+          throw new Error('Failed to fetch documents');
+        }
+        
+        const documents = await response.json();
+        console.log('Documents loaded:', documents);
+        displayDocuments(documents);
+      } catch (error) {
+        console.error('Error loading documents:', error);
+        documentGrid.innerHTML = `<p>Error loading documents: ${error.message}</p>`;
+      }
+    }
+    
+    // Display documents in the grid
+    function displayDocuments(documents) {
+      documentGrid.innerHTML = '';
+      
+      if (!documents || documents.length === 0) {
+        documentGrid.innerHTML = '<p>No documents found. Upload a document to get started.</p>';
+        return;
+      }
+      
+      documents.forEach(doc => {
+        const card = document.createElement('div');
+        card.className = 'document-card';
+        
+        const thumbnail = doc.thumbnailUrl || 'images/farmyield.png';
+        const fileUrl = doc.fileUrl || doc.url || '#';
+        
+        card.innerHTML = `
+          <img src="${thumbnail}" alt="${doc.title}" class="document-thumbnail">
+          <div class="document-info">
+            <h3 class="document-title">${doc.title}</h3>
+            <div class="document-meta">
+              <span>Type: ${doc.type}</span>
+              <span>Added: ${new Date(doc.uploadDate).toLocaleDateString()}</span>
+            </div>
+            <div class="document-description">${doc.description}</div>
+            <div class="document-actions">
+              <a href="${fileUrl}" target="_blank"><i class="fas fa-eye"></i> View</a>
+              <a href="${fileUrl}" download><i class="fas fa-download"></i> Download</a>
+            </div>
+          </div>
+        `;
+        
+        documentGrid.appendChild(card);
+      });
+    }
+  </script>
+</body>
+</html> 

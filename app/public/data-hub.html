@@ -1,0 +1,3149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Data Hub - RawFuelFoods</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <!-- DataTables CSS -->
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.css">
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.dataTables.min.css">
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/select/1.7.0/css/select.dataTables.min.css">
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/datetime/1.5.1/css/dataTables.dateTime.min.css">
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.dataTables.min.css">
+  <link rel="stylesheet" href="css/nav-styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <!-- PDF.js Library (loaded dynamically in JS, but can be included here for better performance) -->
+  <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.4.120/build/pdf.min.js"></script>
+  <script>
+    // Set PDF.js worker
+    window.pdfjsLib = window.pdfjsLib || {};
+    window.pdfjsLib.GlobalWorkerOptions = window.pdfjsLib.GlobalWorkerOptions || {};
+    window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.4.120/build/pdf.worker.min.js';
+  </script>
+  <style>
+/* Reset and Base Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  line-height: 1.6;
+  color: #333;
+  background: #f5f5f5;
+}
+
+
+
+.hamburger,
+.hamburger::before,
+.hamburger::after {
+    content: '';
+    display: block;
+    height: 3px;
+    width: 100%;
+    transition: all 0.3s ease;
+    position: absolute;
+}
+
+.hamburger::before {
+    top: -8px;
+}
+
+.hamburger::after {
+    bottom: -8px;
+}
+
+.nav-menu {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.nav-item {
+    position: relative;
+}
+
+.nav-link {
+    text-decoration: none;
+    padding: 1rem 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.nav-link:hover,
+
+
+.nav-link i {
+    font-size: 0.8em;
+    transition: transform 0.3s ease;
+}
+
+.dropdown:hover .nav-link i {
+    transform: rotate(-180deg);
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    min-width: 200px;
+    padding: 0.5rem 0;
+    border-radius: 4px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+    z-index: 100;
+}
+
+.dropdown:hover .dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.dropdown-menu li {
+  list-style: none;
+}
+
+.dropdown-menu li a {
+  display: block;
+  padding: 0.75rem 1.5rem;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.dropdown-menu li a:hover {
+  background-color: rgba(255,255,255,0.1);
+}
+
+/* Responsive Navigation */
+@media (max-width: 1200px) {
+    .nav-menu {
+        gap: 1rem;
+    }
+
+    .nav-link {
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 992px) {
+    .nav-toggle {
+        display: block;
+    }
+
+    .nav-menu {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        flex-direction: column;
+        padding: 1rem 0;
+        align-items: stretch;
+    }
+
+    .nav-menu.active {
+        display: flex;
+    }
+
+    .nav-item {
+        width: 100%;
+    }
+
+    .nav-link {
+        padding: 1rem 2rem;
+        justify-content: space-between;
+    }
+
+    .dropdown-menu {
+        position: static;
+        background: rgba(255,255,255,0.1);
+        box-shadow: none;
+        opacity: 1;
+        visibility: visible;
+        transform: none;
+        display: none;
+    }
+
+    .dropdown.active .dropdown-menu {
+        display: block;
+    }
+
+    .dropdown-menu li a {
+        padding-left: 3rem;
+    }
+
+    .dropdown-menu li a:hover {
+        background: rgba(255,255,255,0.1);
+    }
+}
+
+/* Adjust main content padding for fixed navbar */
+main {
+    padding-top: 80px;
+}
+
+/* Main Content Styles */
+.main-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.page-title {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.page-description {
+  font-size: 1.1rem;
+  color: #666;
+  margin-bottom: 2rem;
+}
+
+/* Data Hub Layout */
+.data-hub-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Chart Containers */
+.chart-container {
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 30px;
+  height: 350px;
+}
+
+.chart-container canvas {
+  width: 100% !important;
+  height: 300px !important;
+}
+
+/* Forms */
+.data-form {
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 600;
+  color: #333;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.form-group textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+/* Tables */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.data-table th,
+.data-table td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.data-table th {
+  background: #f4f6f8;
+  font-weight: 600;
+}
+
+.data-table tr:hover {
+  background: #f8f9fa;
+}
+
+/* Buttons */
+.button {
+  display: inline-block;
+  padding: 8px 16px;
+  background: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.2s;
+}
+
+.button:hover {
+  background: #0056b3;
+}
+
+.button.secondary {
+  background: #6c757d;
+}
+
+.button.secondary:hover {
+  background: #545b62;
+}
+
+/* Modal */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  overflow: hidden;
+}
+
+.modal-content {
+  position: relative;
+  background: #fff;
+  width: 95%;
+  max-width: 1200px;
+  height: 90vh;
+  margin: 2vh auto;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Error Messages */
+#error-message {
+  display: none;
+  background: #dc3545;
+  color: #fff;
+  padding: 10px 15px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+}
+
+/* Loading States */
+.loading {
+  position: relative;
+  min-height: 200px;
+}
+
+.loading::after {
+  content: 'Loading...';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 14px;
+  color: #666;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .data-hub-container {
+    padding: 10px;
+  }
+
+  .chart-container {
+    padding: 15px;
+  }
+
+  .chart-container canvas {
+    height: 250px !important;
+  }
+
+  .data-table th,
+  .data-table td {
+    padding: 8px 10px;
+    font-size: 14px;
+  }
+
+  .modal-content {
+    margin: 20px auto;
+    width: 95%;
+  }
+}
+
+/* Grid Layout for Dashboard */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(800px, 1fr));
+  gap: 30px;
+  margin-bottom: 30px;
+  padding: 20px;
+}
+
+.dashboard-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 25px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease;
+}
+
+.dashboard-card:hover {
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.dashboard-card h2 {
+  font-size: 1.5rem;
+  color: #2c3e50;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #f0f2f5;
+}
+
+/* Metrics and Stats */
+.metric-card {
+  text-align: center;
+  padding: 15px;
+}
+
+.metric-value {
+  font-size: 24px;
+  font-weight: bold;
+  color: #007bff;
+  margin: 10px 0;
+}
+
+.metric-label {
+  font-size: 14px;
+  color: #666;
+}
+
+/* Status Indicators */
+.status {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.status-success {
+  background: #d4edda;
+  color: #155724;
+}
+
+.status-warning {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.status-danger {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+/* Search and Filters */
+.search-bar {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.search-input {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.filter-dropdown {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  min-width: 150px;
+}
+
+/* DataTable Styles */
+.datatable-container {
+  background: #fff;
+  padding: 25px;
+  border-radius: 8px;
+  margin-top: 20px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.datatable-container h3 {
+  font-size: 1.2rem;
+  margin-bottom: 20px;
+  color: #2c3e50;
+}
+
+.action-buttons {
+  margin-bottom: 15px;
+}
+
+.action-buttons button {
+  margin-right: 10px;
+}
+
+.dt-buttons {
+  margin-bottom: 20px;
+  gap: 10px;
+  display: flex;
+}
+
+.dt-button {
+  background-color: #007bff !important;
+  color: white !important;
+  border: none !important;
+  padding: 8px 16px !important;
+  border-radius: 6px !important;
+  font-size: 14px !important;
+  transition: background-color 0.2s ease !important;
+}
+
+.dt-button:hover {
+  background-color: #0056b3 !important;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+table.dataTable tbody tr.selected {
+  background-color: #e3f2fd !important;
+}
+
+/* DataTable Specific Styles */
+.dataTables_wrapper {
+  margin-top: 15px;
+  padding: 0;
+}
+
+table.dataTable {
+  border-collapse: separate;
+  border-spacing: 0;
+  width: 100% !important;
+  margin: 15px 0 !important;
+}
+
+table.dataTable thead th {
+  background: #f8f9fa;
+  padding: 12px 15px;
+  border-bottom: 2px solid #e9ecef;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+table.dataTable tbody td {
+  padding: 12px 15px;
+  border-bottom: 1px solid #f0f2f5;
+  vertical-align: middle;
+}
+
+table.dataTable tbody tr:hover {
+  background-color: #f8f9fa;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 1200px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .dashboard-card {
+    margin-bottom: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard-card {
+    padding: 15px;
+  }
+  
+  .chart-container {
+    height: 300px;
+  }
+  
+  .chart-container canvas {
+    height: 250px !important;
+  }
+  
+  .datatable-container {
+    padding: 15px;
+    overflow-x: auto;
+  }
+  
+  table.dataTable {
+    font-size: 14px;
+  }
+}
+
+/* Search and Filter Styles */
+.dataTables_filter {
+  margin-bottom: 15px;
+}
+
+.dataTables_filter input {
+  padding: 8px 12px;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  width: 200px;
+}
+
+.dataTables_length select {
+  padding: 6px 10px;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  margin: 0 5px;
+}
+
+/* Pagination Styles */
+.dataTables_paginate {
+  margin-top: 15px;
+}
+
+.paginate_button {
+  padding: 5px 10px;
+  margin: 0 2px;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.paginate_button.current {
+  background-color: #007bff;
+  color: white;
+  border-color: #007bff;
+}
+
+.paginate_button:hover:not(.current) {
+  background: #f8f9fa;
+}
+
+.reports-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.reports-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.report-card {
+  background: #fff;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  transition: transform 0.2s;
+}
+
+.report-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.report-card h3 {
+  margin: 0 0 10px 0;
+  color: #2c3e50;
+}
+
+.report-meta {
+  font-size: 0.9em;
+  color: #666;
+  margin-bottom: 10px;
+}
+
+.report-summary {
+  color: #444;
+  margin-bottom: 15px;
+}
+
+.report-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.report-actions button {
+  padding: 5px 10px;
+  font-size: 0.9em;
+}
+
+#reportFormModal .modal-content {
+  max-width: 600px;
+}
+
+#reportContent {
+  min-height: 200px;
+}
+
+/* Enhanced Report Styles */
+.report-detail {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: white;
+  font-family: 'Georgia', serif;
+  line-height: 1.6;
+  overflow: hidden;
+}
+
+.report-detail .header {
+  flex: 0 0 auto;
+  text-align: center;
+  padding: 40px 40px 20px;
+  background: white;
+  border-bottom: 2px solid #2c3e50;
+  z-index: 2;
+}
+
+.report-detail .content-wrapper {
+  flex: 1;
+  overflow-y: auto;
+  padding: 40px;
+  background: white;
+}
+
+.report-detail .content {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.report-detail .title {
+  font-size: 2.5em;
+  color: #2c3e50;
+  margin-bottom: 10px;
+}
+
+.report-detail .meta {
+  color: #666;
+  font-size: 1.1em;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin: 20px 0;
+}
+
+.report-detail .meta-item {
+  text-align: center;
+}
+
+.report-detail .meta-label {
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+.report-detail .summary {
+  font-size: 1.2em;
+  font-style: italic;
+  color: #666;
+  margin: 30px 0;
+  padding: 20px;
+  background: #f8f9fa;
+  border-left: 4px solid #2c3e50;
+}
+
+.report-detail .content h3 {
+  color: #2c3e50;
+  font-size: 1.5em;
+  margin: 30px 0 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.report-detail .content ul {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.report-detail .content li {
+  margin: 15px 0;
+  padding-left: 25px;
+  position: relative;
+}
+
+.report-detail .content li:before {
+  content: "•";
+  color: #2c3e50;
+  font-weight: bold;
+  position: absolute;
+  left: 0;
+}
+
+.report-detail .content p {
+  margin: 20px 0;
+}
+
+.report-detail .metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  margin: 30px 0;
+}
+
+.report-detail .metric-card {
+  background: #f8f9fa;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.report-detail .metric-value {
+  font-size: 2em;
+  color: #2c3e50;
+  font-weight: bold;
+}
+
+.report-detail .metric-label {
+  color: #666;
+  margin-top: 10px;
+}
+
+.report-detail .recommendations {
+  background: #e3f2fd;
+  padding: 25px;
+  border-radius: 8px;
+  margin: 30px 0;
+}
+
+.report-detail .recommendations h3 {
+  color: #1565c0;
+  border-bottom: none;
+  margin-top: 0;
+}
+
+.report-actions {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+  gap: 10px;
+  z-index: 3;
+  background: white;
+  padding: 10px;
+  border-radius: 30px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.action-button {
+  background-color: #2c3e50;
+  color: white;
+  padding: 12px 24px;
+  border-radius: 30px;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+}
+
+.action-button:hover {
+  background-color: #34495e;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.action-button i {
+  font-size: 1.2em;
+}
+
+/* Print Styles */
+@media print {
+  @page {
+    margin: 2cm;
+  }
+
+  body * {
+    visibility: hidden;
+  }
+
+  .report-detail,
+  .report-detail * {
+    visibility: visible;
+  }
+
+  .report-detail {
+    height: auto;
+    overflow: visible;
+  }
+
+  .report-detail .content-wrapper {
+    overflow: visible;
+  }
+
+  .content {
+    margin: 0 !important;
+  }
+
+  .report-actions {
+    display: none;
+  }
+
+  .report-detail .header {
+    margin-bottom: 30px;
+  }
+
+  .report-detail .content {
+    font-size: 12pt;
+  }
+
+  .report-detail h3 {
+    break-after: avoid;
+  }
+
+  .report-detail li {
+    break-inside: avoid;
+  }
+}
+
+/* Library of Kemet Styles */
+.library-of-kemet {
+  margin-top: 2rem;
+}
+
+.library-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.documents-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.document-card {
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+}
+
+.document-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.document-thumbnail {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  border-bottom: 1px solid #eee;
+}
+
+.document-info {
+  padding: 15px;
+}
+
+.document-info h3 {
+  margin: 0 0 8px 0;
+  font-size: 1.1rem;
+  color: #2c3e50;
+}
+
+.document-meta {
+  font-size: 0.9rem;
+  color: #666;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.document-description {
+  font-size: 0.9rem;
+  color: #444;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.document-viewer {
+  display: flex;
+  flex-direction: column;
+  height: 90vh;
+  width: 90vw;
+  max-width: 1200px;
+}
+
+/* PDF Viewer Container */
+.pdf-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #eee;
+}
+
+.pdf-controls {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 10px 20px;
+  border-bottom: 1px solid #eee;
+  background: white;
+}
+
+.pdf-controls button {
+  padding: 8px 12px;
+  border: none;
+  background: #2c3e50;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.pdf-controls button:hover {
+  background: #34495e;
+}
+
+.pdf-controls button i {
+  font-size: 1.1em;
+}
+
+.pdf-controls .page-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.pdf-controls input {
+  width: 60px;
+  padding: 4px 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  text-align: center;
+}
+
+.pdf-controls .zoom-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.pdf-viewer {
+  flex: 1;
+  overflow: auto;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.pdf-canvas {
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  background: white;
+}
+
+.pdf-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  font-size: 1.2em;
+  color: #666;
+}
+
+.pdf-error {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  color: #dc3545;
+  padding: 20px;
+  text-align: center;
+}
+
+.document-header {
+  padding: 20px;
+  border-bottom: 1px solid #eee;
+}
+
+.document-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  padding: 20px;
+  flex: 1;
+  overflow: hidden;
+}
+
+.document-text {
+  height: 100%;
+  overflow-y: auto;
+  padding: 15px;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  background: #f8f9fa;
+}
+
+#extractedText {
+  min-height: 100%;
+  padding: 15px;
+  font-family: 'Georgia', serif;
+  line-height: 1.6;
+  color: #333;
+}
+
+.document-actions {
+  padding: 20px;
+  border-top: 1px solid #eee;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+@media (max-width: 768px) {
+  .document-content {
+    grid-template-columns: 1fr;
+  }
+  
+  .document-viewer {
+    width: 95vw;
+  }
+}
+
+/* Document Form Styles */
+.document-form {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.document-form .form-group {
+  margin-bottom: 20px;
+}
+
+.document-form input[type="file"] {
+  padding: 10px;
+  border: 2px dashed #ddd;
+  border-radius: 8px;
+  width: 100%;
+  cursor: pointer;
+}
+
+.document-form input[type="file"]:hover {
+  border-color: #2c3e50;
+}
+
+    .hero-banner {
+        position: relative;
+        height: 60vh;
+        min-height: 400px;
+        overflow: hidden;
+        margin-bottom: 4rem;
+      }
+
+      .hero-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        filter: brightness(0.7);
+        transform: scale(1.02);
+        transition: transform 0.3s ease;
+      }
+
+      .hero-banner:hover .hero-image {
+        transform: scale(1.05);
+      }
+
+      .hero-overlay {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+        color: #ffffff;
+        width: 80%;
+        max-width: 800px;
+        padding: 2rem;
+        background: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(5px);
+        border-radius: 10px;
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+      }
+
+      .hero-overlay h1 {
+        font-size: 3.5rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+      }
+
+      .hero-overlay p {
+        font-size: 1.2rem;
+        line-height: 1.6;
+        margin: 0;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+      }
+
+      .data-hub-intro {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 2rem 4rem;
+        text-align: center;
+      }
+
+      .page-title {
+        font-size: 2.5rem;
+        color: #2c3e50;
+        margin-bottom: 1.5rem;
+        position: relative;
+        display: inline-block;
+      }
+
+      .page-title:after {
+        content: '';
+        position: absolute;
+        bottom: -10px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 80px;
+        height: 4px;
+        background: #3498db;
+        border-radius: 2px;
+      }
+
+      .page-description {
+        font-size: 1.1rem;
+        line-height: 1.8;
+        color: #555;
+        max-width: 900px;
+        margin: 0 auto;
+      }
+
+      @media (max-width: 768px) {
+        .hero-banner {
+          height: 50vh;
+        }
+
+        .hero-overlay h1 {
+          font-size: 2.5rem;
+        }
+
+        .hero-overlay p {
+          font-size: 1rem;
+        }
+
+        .page-title {
+          font-size: 2rem;
+        }
+
+        .page-description {
+          font-size: 1rem;
+        }
+      }
+      
+      /* PDF Viewer Styles */
+      .document-viewer {
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        margin-bottom: 30px;
+        position: relative;
+      }
+      
+      .document-controls {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+      
+      .document-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 20px;
+        border-bottom: 1px solid #eee;
+        flex-wrap: wrap;
+      }
+      
+      .btn {
+        padding: 8px 12px;
+        border-radius: 4px;
+        font-size: 14px;
+        cursor: pointer;
+        border: none;
+        transition: all 0.2s;
+      }
+      
+      .btn-primary {
+        background-color: #007bff;
+        color: white;
+      }
+      
+      .btn-primary:hover {
+        background-color: #0069d9;
+      }
+      
+      .btn-secondary {
+        background-color: #6c757d;
+        color: white;
+      }
+      
+      .btn-secondary:hover {
+        background-color: #5a6268;
+      }
+      
+      .document-viewer.loading::after {
+        content: 'Loading...';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        padding: 10px 20px;
+        background: rgba(0,0,0,0.7);
+        color: white;
+        border-radius: 4px;
+        z-index: 10;
+      }
+      
+      .error-message {
+        position: absolute;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 10px 20px;
+        background: #dc3545;
+        color: white;
+        border-radius: 4px;
+        z-index: 10;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+      }
+      
+      .success-message {
+        position: absolute;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 10px 20px;
+        background: #28a745;
+        color: white;
+        border-radius: 4px;
+        z-index: 10;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+      }
+      
+      /* Document Section Styles */
+      .document-section {
+        padding: 20px;
+        margin-bottom: 40px;
+        background: #f8f9fa;
+        border-radius: 8px;
+      }
+      
+      .section-title {
+        font-size: 2rem;
+        color: #2c3e50;
+        margin-bottom: 1rem;
+      }
+      
+      .section-description {
+        font-size: 1.1rem;
+        color: #666;
+        margin-bottom: 1.5rem;
+        line-height: 1.6;
+      }
+      
+      .pdf-viewer {
+        width: 100%;
+        height: 600px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        overflow: auto;
+        background: #f8f9fa;
+      }
+      
+      .document-text h3 {
+        margin-top: 0;
+        margin-bottom: 15px;
+        color: #2c3e50;
+      }
+      
+      #extractedText {
+        font-family: Georgia, serif;
+        line-height: 1.7;
+        white-space: pre-wrap;
+        padding: 10px;
+        height: 550px;
+        overflow-y: auto;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        background: #fff;
+      }
+    </style>
+  </head>
+<body>
+  <nav class="main-nav">
+    <div class="nav-brand">
+        <a href="/" class="logo">RawFuelFoods</a>
+        <button class="nav-toggle" aria-label="Toggle Navigation">
+            <span class="hamburger"></span>
+        </button>
+    </div>
+    
+    <ul class="nav-menu">
+        <li class="nav-item">
+            <a href="/about" class="nav-link">About & Contact</a>
+        </li>
+        <li class="nav-item">
+          <a href="/data-hub" class="nav-link active">Data Hub</a>
+      </li>
+        <li class="nav-item dropdown">
+            <a href="/farm" class="nav-link">Farms <i class="fas fa-chevron-down"></i></a>
+            <ul class="dropdown-menu">
+                <li><a href="/farms/locations">Locations</a></li>
+                <li><a href="/farms/products">Products</a></li>
+                <li><a href="/farms/sustainability">Sustainability</a></li>
+                <li><a href="/farms/partners">Partners</a></li>
+            </ul>
+        </li>
+       
+        <li class="nav-item dropdown">
+            <a href="/health-wellness" class="nav-link">Health/Wellness <i class="fas fa-chevron-down"></i></a>
+            <ul class="dropdown-menu">
+                <li><a href="/health-wellness/programs">Programs</a></li>
+                <li><a href="/health-wellness/nutrition">Nutrition</a></li>
+                <li><a href="/health-wellness/coaching">Coaching</a></li>
+                <li><a href="/health-wellness/resources">Resources</a></li>
+                <li><a href="/eat-drink/menu">Menu</a></li>
+                <li><a href="/eat-drink/specials">Daily Specials</a></li>
+                <li><a href="/eat-drink/catering">Catering</a></li>
+                <li><a href="/eat-drink/events">Events</a></li>
+            </ul>
+        </li>
+   
+       
+        <li class="nav-item dropdown">
+            <a href="/networks" class="nav-link">Networks <i class="fas fa-chevron-down"></i></a>
+            <ul class="dropdown-menu">
+                <li><a href="/networks/partners">Partners</a></li>
+                <li><a href="/networks/community">Community</a></li>
+                <li><a href="/networks/initiatives">Initiatives</a></li>
+                <a href="/communications" class="nav-link">Communications</a>
+                <li><a href="/events/calendar">Calendar</a></li>
+                <li><a href="/events/workshops">Workshops</a></li>
+                <li><a href="/events/classes">Classes</a></li>
+                <li><a href="/events/special">Special Events</a></li>
+                <a href="/outdoors-rx" class="nav-link">Outdoors RX</a>
+
+            </ul>
+        </li>
+     
+      
+        <li class="nav-item dropdown">
+          <a href="/pdf-library-docs" class="nav-link">Lib of kemet docs <i class="fas fa-chevron-down"></i></a>
+          <ul class="dropdown-menu">
+              <li><a href="/events/calendar">Calendar</a></li>
+              <li><a href="/events/workshops">Workshops</a></li>
+              <li><a href="/events/classes">Classes</a></li>
+              <li><a href="/events/special">Special Events</a></li>
+              <a href="/blog" class="nav-link">Blog</a>
+
+          </ul>
+      </li>
+        </ul>
+      
+      </nav>
+
+  <main class="main-content">
+    <div class="hero-banner">
+      <img src="images/farmyield.png" alt="Data-Driven Urban Farming Analytics" class="hero-image">
+      <div class="hero-overlay">
+        <h1>Data-Driven Insights</h1>
+        <p>Transforming urban agriculture through advanced analytics and real-time monitoring</p>
+      </div>
+    </div>
+
+    <div class="data-hub-intro">
+      <h1 class="page-title">Data Hub</h1>
+      <p class="page-description">Our comprehensive analytics platform transforms raw data from urban farms into actionable insights, enabling data-driven decisions for optimizing yields, resources, and sustainability. Through IoT sensors and advanced monitoring, we track key metrics like soil health, water efficiency, and crop productivity while measuring broader community impact through food security improvements, economic benefits, and environmental sustainability indicators.</p>
+    </div>
+
+    <div class="data-hub-container">
+      <div id="error-message"></div>
+
+      <!-- Dashboard Grid -->
+      <div class="dashboard-grid">
+        <!-- Farm Performance -->
+        <div class="dashboard-card">
+          <h2>Farm Performance</h2>
+          <div class="chart-container">
+          <canvas id="farmPerformanceChart"></canvas>
+          </div>
+          <div class="datatable-container">
+            <h3>Farm Data Management</h3>
+            <table id="farmDataTable" class="display responsive nowrap" style="width:100%">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Crop Type</th>
+                  <th>Yield Amount</th>
+                  <th>Area (sq ft)</th>
+                  <th>Notes</th>
+                  <th>Date Added</th>
+                </tr>
+              </thead>
+            </table>
+        </div>
+        </div>
+
+        <!-- Resource Metrics -->
+        <div class="dashboard-card">
+          <h2>Resource Metrics</h2>
+          <div class="chart-container">
+          <canvas id="resourceEfficiencyChart"></canvas>
+          </div>
+          <div class="datatable-container">
+            <h3>Resource Data Management</h3>
+            <table id="resourceDataTable" class="display responsive nowrap" style="width:100%">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Metric Type</th>
+                  <th>Value</th>
+                  <th>Unit</th>
+                  <th>Date</th>
+                  <th>Notes</th>
+                </tr>
+              </thead>
+            </table>
+        </div>
+          </div>
+
+        <!-- Community Impact -->
+        <div class="dashboard-card">
+          <h2>Community Impact</h2>
+          <div class="chart-container">
+            <canvas id="communityEngagementChart"></canvas>
+            </div>
+          <div class="datatable-container">
+            <h3>Community Data Management</h3>
+            <table id="communityDataTable" class="display responsive nowrap" style="width:100%">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Program Type</th>
+                  <th>Participants</th>
+                  <th>Location</th>
+                  <th>Date</th>
+                  <th>Feedback Score</th>
+                  <th>Notes</th>
+                </tr>
+              </thead>
+            </table>
+            </div>
+            </div>
+        </div>
+
+      <!-- Reports & Analysis -->
+      <div class="dashboard-card">
+        <h2>Reports & Analysis</h2>
+        <div class="reports-controls">
+          <div class="search-bar">
+            <input type="text" id="reportSearch" class="search-input" placeholder="Search reports...">
+            <select id="reportFilter" class="filter-dropdown">
+              <option value="all">All Types</option>
+              <option value="farm">Farm Reports</option>
+              <option value="resource">Resource Reports</option>
+              <option value="community">Community Reports</option>
+              </select>
+            </div>
+          <button onclick="openReportForm()" class="button">Create New Report</button>
+        </div>
+        <div id="reportsContainer" class="reports-grid"></div>
+      </div>
+
+      <!-- Library of Kemet -->
+      <div class="dashboard-card library-of-kemet">
+        <h2>Library of Kemet</h2>
+        <div class="library-controls">
+          <div class="search-bar">
+            <input type="text" id="documentSearch" class="search-input" placeholder="Search documents...">
+            <select id="documentFilter" class="filter-dropdown">
+              <option value="all">All Types</option>
+              <option value="research">Research Papers</option>
+              <option value="guides">Farming Guides</option>
+              <option value="historical">Historical Documents</option>
+            </select>
+          </div>
+          <button onclick="openDocumentUpload()" class="button">
+            <i class="fas fa-upload"></i> Upload Document
+          </button>
+        </div>
+        <div id="documentsContainer" class="documents-grid"></div>
+      </div>
+
+      <!-- Document Upload Modal -->
+      <div id="documentUploadModal" class="modal">
+        <div class="modal-content">
+          <h2>Upload Document</h2>
+          <form id="documentUploadForm" class="document-form">
+            <div class="form-group">
+              <label for="documentTitle">Title</label>
+              <input type="text" id="documentTitle" name="title" required>
+            </div>
+            <div class="form-group">
+              <label for="documentType">Type</label>
+              <select id="documentType" name="type" required>
+                <option value="research">Research Paper</option>
+                <option value="guides">Farming Guide</option>
+                <option value="historical">Historical Document</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="documentDescription">Description</label>
+              <textarea id="documentDescription" name="description" required></textarea>
+            </div>
+            <div class="form-group">
+              <label for="documentFile">PDF File</label>
+              <input type="file" id="documentFile" name="file" accept=".pdf" required>
+            </div>
+            <div class="form-group">
+              <label for="documentThumbnail">Cover Image (Optional)</label>
+              <input type="file" id="documentThumbnail" name="thumbnail" accept="image/*">
+            </div>
+            <div class="modal-buttons">
+              <button type="submit" class="button">Upload</button>
+              <button type="button" onclick="closeDocumentUpload()" class="button secondary">Cancel</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Document View Modal -->
+      <div id="documentViewModal" class="modal">
+        <div class="modal-content">
+          <span class="close" onclick="document.getElementById('documentViewModal').style.display='none'">&times;</span>
+          <div class="document-header">
+            <h2 id="viewDocumentTitle"></h2>
+            <div class="document-meta">
+              <span id="viewDocumentType"></span>
+              <span id="viewDocumentDate"></span>
+            </div>
+          </div>
+          <div class="document-content">
+            <div class="pdf-container">
+              <div class="pdf-controls">
+                <button id="prevPage" class="button"><i class="fas fa-arrow-left"></i> Previous</button>
+                <span class="page-info">Page <span id="pageNum">1</span> of <span id="pageCount">14</span></span>
+                <button id="nextPage" class="button"><i class="fas fa-arrow-right"></i> Next</button>
+                <div class="zoom-controls">
+                  <button id="zoomOut" class="button"><i class="fas fa-search-minus"></i></button>
+                  <span id="zoomLevel">100%</span>
+                  <button id="zoomIn" class="button"><i class="fas fa-search-plus"></i></button>
+                </div>
+                <button id="downloadPdf" class="button"><i class="fas fa-download"></i> Download</button>
+                <button id="loadSamplePdf" class="button" onclick="openPDFViewer('https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/web/compressed.tracemonkey-pldi-09.pdf')">
+                  <i class="fas fa-file-pdf"></i> Load Sample PDF
+                </button>
+              </div>
+              <div class="pdf-viewer">
+                <canvas id="pdfViewer"></canvas>
+              </div>
+              <div class="pdf-error">Error loading PDF</div>
+              <div class="pdf-loading">Loading PDF...</div>
+            </div>
+            <div class="document-text">
+              <h3>Extracted Text</h3>
+              <div id="extractedText"></div>
+            </div>
+          </div>
+          <div class="document-actions">
+            <button id="copyText" class="btn">Copy Text</button>
+            <button id="printDocument" class="btn">Print</button>
+            <button class="btn" onclick="document.getElementById('documentViewModal').style.display='none'">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal -->
+    <div id="reportModal" class="modal">
+      <div class="modal-content"></div>
+      </div>
+
+    <!-- Modal for CRUD operations -->
+    <div id="crudModal" class="modal">
+    <div class="modal-content">
+        <h2 id="modalTitle">Add/Edit Record</h2>
+        <form id="crudForm">
+          <!-- Form fields will be dynamically added here -->
+        </form>
+        <div class="modal-buttons">
+          <button type="button" onclick="saveCrudForm()" class="button">Save</button>
+          <button type="button" onclick="closeModal()" class="button secondary">Cancel</button>
+        </div>
+    </div>
+  </div>
+
+    <footer>
+      <p>Contact: Call 206.718.9951 | rawfuelfoods@gmail.com</p>
+  </footer>
+  </main>
+
+  <!-- Required JS libraries -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script type="text/javascript" src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+  <script type="text/javascript" src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
+  <script type="text/javascript" src="https://cdn.datatables.net/select/1.7.0/js/dataTables.select.min.js"></script>
+  <script type="text/javascript" src="https://cdn.datatables.net/datetime/1.5.1/js/dataTables.dateTime.min.js"></script>
+  <script type="text/javascript" src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+  
+  <!-- PDF.js library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script src="js/simple-pdf-viewer.js"></script>
+  <script src="js/document-manager.js"></script>
+  <script src="js/document-uploader-fix.js"></script>
+
+  <script>
+    // Global variables for DataTables
+    let farmDataTable, resourceDataTable, communityDataTable;
+    let currentTable = null;
+    let editingId = null;
+
+    // Get the base URL from the window configuration
+    const API_BASE_URL = window.API_BASE_URL || 'http://localhost:3000';
+
+    // Initialize everything when the page loads
+    document.addEventListener('DOMContentLoaded', async () => {
+        try {
+            await initializeTables();
+            setupSearchAndFilters();
+            await loadAllData();
+            setupEventListeners();
+        } catch (error) {
+            showError('Error initializing data hub: ' + error.message);
+        }
+    });
+
+    // Setup event listeners
+    function setupEventListeners() {
+        const reportSearch = document.getElementById('reportSearch');
+        const reportFilter = document.getElementById('reportFilter');
+        const documentSearch = document.getElementById('documentSearch');
+        const documentFilter = document.getElementById('documentFilter');
+
+        if (reportSearch) {
+            reportSearch.addEventListener('input', debounce(() => {
+                filterReports(reportSearch.value, reportFilter ? reportFilter.value : 'all');
+            }, 300));
+        }
+
+        if (reportFilter) {
+            reportFilter.addEventListener('change', () => {
+                filterReports(reportSearch ? reportSearch.value : '', reportFilter.value);
+            });
+        }
+
+        if (documentSearch) {
+            documentSearch.addEventListener('input', debounce(() => {
+                filterDocuments(documentSearch.value, documentFilter ? documentFilter.value : 'all');
+            }, 300));
+        }
+
+        if (documentFilter) {
+            documentFilter.addEventListener('change', () => {
+                filterDocuments(documentSearch ? documentSearch.value : '', documentFilter.value);
+            });
+        }
+    }
+
+    // Initialize DataTables
+    async function initializeTables() {
+        const commonConfig = {
+            responsive: true,
+            dom: 'Bfrtip',
+            select: true,
+            buttons: [
+                {
+                    text: 'Add New',
+                    action: function () {
+                        openCrudModal(this.table().context[0].sTableId);
+                    }
+                },
+                {
+                    text: 'Edit',
+                    extend: 'selected',
+                    action: function () {
+                        const data = this.rows({ selected: true }).data()[0];
+                        openCrudModal(this.table().context[0].sTableId, data);
+                    }
+                },
+                {
+                    text: 'Delete',
+                    extend: 'selected',
+                    action: function () {
+                        if (confirm('Are you sure you want to delete this record?')) {
+                            const data = this.rows({ selected: true }).data()[0];
+                            deleteRecord(this.table().context[0].sTableId, data.id);
+                        }
+                    }
+                }
+            ]
+        };
+
+        farmDataTable = $('#farmDataTable').DataTable({
+            ...commonConfig,
+            columns: [
+                { data: 'id' },
+                { data: 'cropType' },
+                { data: 'yieldAmount' },
+                { data: 'area' },
+                { data: 'notes' },
+                { data: 'dateAdded' }
+            ]
+        });
+
+        resourceDataTable = $('#resourceDataTable').DataTable({
+            ...commonConfig,
+            columns: [
+                { data: 'id' },
+                { data: 'metricType' },
+                { data: 'value' },
+                { data: 'unit' },
+                { data: 'date' },
+                { data: 'notes' }
+            ]
+        });
+
+        communityDataTable = $('#communityDataTable').DataTable({
+            ...commonConfig,
+            columns: [
+                { data: 'id' },
+                { data: 'programType' },
+                { data: 'participants' },
+                { data: 'location' },
+                { data: 'date' },
+                { data: 'feedbackScore' },
+                { data: 'notes' }
+            ]
+        });
+    }
+
+    // CRUD Modal Functions
+    function openCrudModal(tableId, data = null) {
+        currentTable = tableId;
+        editingId = data ? data.id : null;
+        const modal = document.getElementById('crudModal');
+        const form = document.getElementById('crudForm');
+        form.innerHTML = '';
+
+        // Create form fields based on table type
+        switch (tableId) {
+            case 'farmDataTable':
+                createFormFields(form, [
+                    { name: 'cropType', label: 'Crop Type', type: 'text', required: true },
+                    { name: 'yieldAmount', label: 'Yield Amount', type: 'number', required: true },
+                    { name: 'area', label: 'Area (sq ft)', type: 'number', required: true },
+                    { name: 'notes', label: 'Notes', type: 'textarea' }
+                ], data);
+                break;
+            case 'resourceDataTable':
+                createFormFields(form, [
+                    { name: 'metricType', label: 'Metric Type', type: 'select', 
+                      options: ['Water Usage', 'Energy Usage', 'Compost'], required: true },
+                    { name: 'value', label: 'Value', type: 'number', required: true },
+                    { name: 'unit', label: 'Unit', type: 'text', required: true },
+                    { name: 'date', label: 'Date', type: 'date', required: true },
+                    { name: 'notes', label: 'Notes', type: 'textarea' }
+                ], data);
+                break;
+            case 'communityDataTable':
+                createFormFields(form, [
+                    { name: 'programType', label: 'Program Type', type: 'select',
+                      options: ['Workshop', 'Education', 'Volunteer'], required: true },
+                    { name: 'participants', label: 'Participants', type: 'number', required: true },
+                    { name: 'location', label: 'Location', type: 'text', required: true },
+                    { name: 'date', label: 'Date', type: 'date', required: true },
+                    { name: 'feedbackScore', label: 'Feedback Score', type: 'number',
+                      min: 1, max: 5, step: 0.1, required: true },
+                    { name: 'notes', label: 'Notes', type: 'textarea' }
+                ], data);
+                break;
+        }
+
+        modal.style.display = 'block';
+    }
+
+    function createFormFields(form, fields, data) {
+        fields.forEach(field => {
+            const div = document.createElement('div');
+            div.className = 'form-group';
+            
+            const label = document.createElement('label');
+            label.textContent = field.label;
+            div.appendChild(label);
+
+            let input;
+            if (field.type === 'textarea') {
+                input = document.createElement('textarea');
+            } else if (field.type === 'select') {
+                input = document.createElement('select');
+                field.options.forEach(option => {
+                    const opt = document.createElement('option');
+                    opt.value = option;
+                    opt.textContent = option;
+                    input.appendChild(opt);
+                });
+            } else {
+                input = document.createElement('input');
+                input.type = field.type;
+                if (field.min !== undefined) input.min = field.min;
+                if (field.max !== undefined) input.max = field.max;
+                if (field.step !== undefined) input.step = field.step;
+            }
+
+            input.name = field.name;
+            input.required = field.required;
+            if (data && data[field.name]) {
+                input.value = data[field.name];
+            }
+
+            div.appendChild(input);
+            form.appendChild(div);
+        });
+    }
+
+    async function saveCrudForm() {
+        const form = document.getElementById('crudForm');
+        const formData = new FormData(form);
+        const data = Object.fromEntries(formData);
+        
+        try {
+            const endpoint = getEndpointForTable(currentTable);
+            const method = editingId ? 'PUT' : 'POST';
+            const url = editingId ? `${API_BASE_URL}${endpoint}/${editingId}` : `${API_BASE_URL}${endpoint}`;
+            
+            const response = await fetch(url, {
+                method: method,
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+
+            if (!response.ok) throw new Error('Failed to save data');
+
+            // Refresh data and close modal
+            await loadAllData();
+            closeModal();
+            showSuccess('Data saved successfully');
+        } catch (error) {
+            showError('Error saving data: ' + error.message);
+        }
+    }
+
+    async function deleteRecord(tableId, id) {
+        try {
+            const endpoint = getEndpointForTable(tableId);
+            const response = await fetch(`${API_BASE_URL}${endpoint}/${id}`, {
+                method: 'DELETE'
+            });
+
+            if (!response.ok) throw new Error('Failed to delete record');
+
+            // Refresh data
+            await loadAllData();
+            showSuccess('Record deleted successfully');
+        } catch (error) {
+            showError('Error deleting record: ' + error.message);
+        }
+    }
+
+    function getEndpointForTable(tableId) {
+        switch (tableId) {
+            case 'farmDataTable': return '/api/farm-data';
+            case 'resourceDataTable': return '/api/resource-metrics';
+            case 'communityDataTable': return '/api/community-impact';
+            default: throw new Error('Unknown table ID');
+        }
+    }
+
+    // Load data functions
+    async function loadAllData() {
+        try {
+            await Promise.all([
+                loadFarmData(),
+                loadResourceData(),
+                loadCommunityData()
+            ]);
+            updateCharts();
+        } catch (error) {
+            showError('Failed to load data: ' + error.message);
+        }
+    }
+
+    async function loadFarmData() {
+        const response = await fetch(`${API_BASE_URL}/api/farm-data`);
+        if (!response.ok) throw new Error('Failed to fetch farm data');
+    const data = await response.json();
+        farmDataTable.clear().rows.add(data).draw();
+        return data;
+    }
+
+    async function loadResourceData() {
+        const response = await fetch(`${API_BASE_URL}/api/resource-metrics`);
+        if (!response.ok) throw new Error('Failed to fetch resource data');
+        const data = await response.json();
+        resourceDataTable.clear().rows.add(data).draw();
+        return data;
+    }
+
+    async function loadCommunityData() {
+        const response = await fetch(`${API_BASE_URL}/api/community-impact`);
+        if (!response.ok) throw new Error('Failed to fetch community data');
+        const data = await response.json();
+        communityDataTable.clear().rows.add(data).draw();
+        return data;
+    }
+
+    // Update charts with current data
+    function updateCharts() {
+        const farmData = farmDataTable.data().toArray();
+        const resourceData = resourceDataTable.data().toArray();
+        const communityData = communityDataTable.data().toArray();
+
+        updateFarmPerformanceChart(farmData);
+        updateResourceEfficiencyChart(resourceData);
+        updateCommunityEngagementChart(communityData);
+    }
+
+    // Chart update functions
+    let farmChart, resourceChart, communityChart;
+
+    function updateFarmPerformanceChart(data) {
+    const ctx = document.getElementById('farmPerformanceChart').getContext('2d');
+        
+        // Destroy existing chart if it exists
+        if (farmChart) {
+            farmChart.destroy();
+        }
+
+        // Prepare data
+        const labels = data.map(item => item.cropType);
+        const yields = data.map(item => item.yieldAmount);
+        const areas = data.map(item => item.area);
+
+        farmChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'Yield Amount',
+                        data: yields,
+                        backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Area (sq ft)',
+                        data: areas,
+                        backgroundColor: 'rgba(75, 192, 192, 0.5)',
+          borderColor: 'rgba(75, 192, 192, 1)',
+          borderWidth: 1
+                    }
+                ]
+      },
+      options: {
+        responsive: true,
+                maintainAspectRatio: false,
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+                },
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Farm Performance by Crop'
+                    }
+        }
+      }
+    });
+    }
+
+    function updateResourceEfficiencyChart(data) {
+        const ctx = document.getElementById('resourceEfficiencyChart').getContext('2d');
+        
+        // Destroy existing chart if it exists
+        if (resourceChart) {
+            resourceChart.destroy();
+        }
+
+        // Group data by metric type
+        const groupedData = data.reduce((acc, item) => {
+            if (!acc[item.metricType]) {
+                acc[item.metricType] = [];
+            }
+            acc[item.metricType].push({
+                value: item.value,
+                date: item.date
+            });
+            return acc;
+        }, {});
+
+        // Prepare datasets
+        const datasets = Object.entries(groupedData).map(([metricType, values], index) => {
+            const colors = [
+                ['rgba(255, 99, 132, 0.5)', 'rgba(255, 99, 132, 1)'],
+                ['rgba(54, 162, 235, 0.5)', 'rgba(54, 162, 235, 1)'],
+                ['rgba(255, 206, 86, 0.5)', 'rgba(255, 206, 86, 1)']
+            ];
+            return {
+                label: metricType,
+                data: values.map(v => v.value),
+                backgroundColor: colors[index][0],
+                borderColor: colors[index][1],
+                borderWidth: 1
+            };
+        });
+
+        const labels = [...new Set(data.map(item => item.date))].sort();
+
+        resourceChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+                labels: labels,
+                datasets: datasets
+      },
+      options: {
+        responsive: true,
+                maintainAspectRatio: false,
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+                },
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Resource Usage Over Time'
+                    }
+        }
+      }
+    });
+    }
+
+    function updateCommunityEngagementChart(data) {
+        const ctx = document.getElementById('communityEngagementChart').getContext('2d');
+        
+        // Destroy existing chart if it exists
+        if (communityChart) {
+            communityChart.destroy();
+        }
+
+        // Prepare data
+        const programTypes = [...new Set(data.map(item => item.programType))];
+        const datasets = programTypes.map(type => {
+            const programData = data.filter(item => item.programType === type);
+            return {
+                label: type,
+                data: programData.map(item => ({
+                    x: item.date,
+                    y: item.participants,
+                    feedback: item.feedbackScore
+                }))
+            };
+        });
+
+        communityChart = new Chart(ctx, {
+            type: 'bubble',
+      data: {
+                datasets: datasets.map((dataset, index) => ({
+                    ...dataset,
+          backgroundColor: [
+                        'rgba(255, 99, 132, 0.5)',
+                        'rgba(54, 162, 235, 0.5)',
+                        'rgba(255, 206, 86, 0.5)'
+                    ][index],
+          borderColor: [
+            'rgba(255, 99, 132, 1)',
+            'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)'
+                    ][index],
+                    data: dataset.data.map(item => ({
+                        x: new Date(item.x),
+                        y: item.y,
+                        r: item.feedback * 4 // Scale bubble size based on feedback score
+                    }))
+                }))
+      },
+      options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        type: 'time',
+                        time: {
+                            unit: 'day'
+                        },
+                        title: {
+                            display: true,
+                            text: 'Date'
+                        }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Number of Participants'
+                        }
+                    }
+                },
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Community Engagement (Bubble size represents feedback score)'
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const data = context.raw;
+                                return `${context.dataset.label}: ${data.y} participants, Feedback: ${(data.r/4).toFixed(1)}`;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    // Search and Filter Setup
+    function setupSearchAndFilters() {
+        const searchInput = document.querySelector('.search-input');
+        const filterDropdown = document.querySelector('.filter-dropdown');
+    
+    if (searchInput) {
+        searchInput.addEventListener('input', debounce(() => {
+                filterReports(searchInput.value, filterDropdown.value);
+        }, 300));
+    }
+    
+        if (filterDropdown) {
+            filterDropdown.addEventListener('change', () => {
+                filterReports(searchInput.value, filterDropdown.value);
+        });
+    }
+}
+
+    // Filter Reports
+function filterReports(searchTerm, filterType) {
+    const reports = document.querySelectorAll('.report-card');
+    reports.forEach(report => {
+        const title = report.querySelector('h3').textContent.toLowerCase();
+        const shouldShow = 
+                (searchTerm === '' || title.includes(searchTerm.toLowerCase())) &&
+                (filterType === 'all' || report.dataset.type === filterType);
+        report.style.display = shouldShow ? 'block' : 'none';
+    });
+}
+
+    // View Report Details
+    async function viewReport(id) {
+        try {
+            const response = await fetch(`${API_BASE_URL}/api/reports/${id}`);
+            if (!response.ok) throw new Error('Failed to fetch report');
+            
+            const report = await response.json();
+            const modal = document.getElementById('reportModal');
+            const content = modal.querySelector('.modal-content');
+            
+            content.innerHTML = `
+                <div class="report-detail" id="reportDetail">
+                    <div class="header">
+                        <div class="title">${report.title}</div>
+                        <div class="meta">
+                            <div class="meta-item">
+                                <div class="meta-label">Author</div>
+                                <div>${report.author}</div>
+                            </div>
+                            <div class="meta-item">
+                                <div class="meta-label">Date</div>
+                                <div>${new Date(report.date).toLocaleDateString('en-US', {
+                                    year: 'numeric',
+                                    month: 'long',
+                                    day: 'numeric'
+                                })}</div>
+                            </div>
+                            <div class="meta-item">
+                                <div class="meta-label">Report Type</div>
+                                <div>${report.type.charAt(0).toUpperCase() + report.type.slice(1)}</div>
+                            </div>
+                        </div>
+                        <div class="summary">${report.summary}</div>
+                    </div>
+                    <div class="content-wrapper">
+                        <div class="content">
+                            ${report.content}
+                        </div>
+                    </div>
+                </div>
+                <div class="report-actions">
+                    <button onclick="exportToPDF()" class="action-button">
+                        <i class="fas fa-file-pdf"></i> Export PDF
+                    </button>
+                    <button onclick="window.print()" class="action-button">
+                        <i class="fas fa-print"></i> Print
+                    </button>
+                    <button onclick="closeModal()" class="action-button">
+                        <i class="fas fa-times"></i> Close
+                    </button>
+                </div>
+            `;
+            
+    modal.style.display = 'block';
+        } catch (error) {
+            showError('Error loading report: ' + error.message);
+        }
+    }
+
+    async function exportToPDF() {
+        const element = document.getElementById('reportDetail');
+        const opt = {
+            margin: 1,
+            filename: 'report.pdf',
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2 },
+            jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+        };
+
+        try {
+            await html2pdf().set(opt).from(element).save();
+            showSuccess('PDF exported successfully');
+        } catch (error) {
+            showError('Error exporting PDF: ' + error.message);
+        }
+    }
+
+    // Close Modal
+    function closeModal() {
+        document.getElementById('crudModal').style.display = 'none';
+        document.getElementById('reportModal').style.display = 'none';
+    }
+
+    // Error and Success Message Functions
+    function showError(message) {
+        const errorDiv = document.getElementById('error-message');
+        if (errorDiv) {
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+            errorDiv.style.backgroundColor = '#dc3545';
+            errorDiv.style.color = '#fff';
+            errorDiv.style.padding = '10px 15px';
+            errorDiv.style.borderRadius = '4px';
+            errorDiv.style.marginBottom = '20px';
+            
+            // Auto-hide after 5 seconds
+            setTimeout(() => {
+                errorDiv.style.display = 'none';
+            }, 5000);
+        } else {
+            console.error(message);
+        }
+    }
+
+    function showSuccess(message) {
+        const errorDiv = document.getElementById('error-message');
+        if (errorDiv) {
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+            errorDiv.style.backgroundColor = '#28a745';
+            errorDiv.style.color = '#fff';
+            errorDiv.style.padding = '10px 15px';
+            errorDiv.style.borderRadius = '4px';
+            errorDiv.style.marginBottom = '20px';
+            
+            // Auto-hide after 3 seconds
+            setTimeout(() => {
+                errorDiv.style.display = 'none';
+            }, 3000);
+        } else {
+            console.log(message);
+        }
+    }
+
+    // Utility Functions
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}
+
+    // Navigation functionality
+document.addEventListener('DOMContentLoaded', () => {
+        const navToggle = document.querySelector('.nav-toggle');
+        const navMenu = document.querySelector('.nav-menu');
+        const dropdowns = document.querySelectorAll('.dropdown');
+
+        // Toggle mobile menu
+        navToggle.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+            
+            // Toggle hamburger animation
+            navToggle.classList.toggle('active');
+            const hamburger = navToggle.querySelector('.hamburger');
+            if (navToggle.classList.contains('active')) {
+                hamburger.style.transform = 'rotate(45deg)';
+                hamburger.style.backgroundColor = 'transparent';
+            } else {
+                hamburger.style.transform = 'none';
+                hamburger.style.backgroundColor = 'white';
+            }
+        });
+
+        // Handle dropdowns on mobile
+        dropdowns.forEach(dropdown => {
+            const link = dropdown.querySelector('.nav-link');
+            link.addEventListener('click', (e) => {
+                if (window.innerWidth <= 992) {
+                    e.preventDefault();
+                    dropdown.classList.toggle('active');
+                    const dropdownMenu = dropdown.querySelector('.dropdown-menu');
+                    dropdownMenu.style.display = dropdown.classList.contains('active') ? 'block' : 'none';
+                }
+            });
+        });
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!navMenu.contains(e.target) && !navToggle.contains(e.target)) {
+                navMenu.classList.remove('active');
+                navToggle.classList.remove('active');
+            }
+        });
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 992) {
+                navMenu.classList.remove('active');
+                navToggle.classList.remove('active');
+                dropdowns.forEach(dropdown => {
+                    dropdown.classList.remove('active');
+                    const dropdownMenu = dropdown.querySelector('.dropdown-menu');
+                    dropdownMenu.style.display = '';
+                });
+            }
+        });
+    });
+
+    // Reports Management
+    let editingReportId = null;
+
+    async function loadReports() {
+      try {
+        const searchTerm = document.getElementById('reportSearch').value;
+        const filterType = document.getElementById('reportFilter').value;
+        
+        const response = await fetch(`${API_BASE_URL}/api/reports?type=${filterType}&search=${searchTerm}`);
+        if (!response.ok) throw new Error('Failed to fetch reports');
+        
+        const reports = await response.json();
+        displayReports(reports);
+        } catch (error) {
+        showError('Error loading reports: ' + error.message);
+      }
+    }
+
+    function displayReports(reports) {
+      const container = document.getElementById('reportsContainer');
+      container.innerHTML = '';
+
+      reports.forEach(report => {
+        const card = document.createElement('div');
+        card.className = 'report-card';
+        card.dataset.type = report.type;
+        
+        card.innerHTML = `
+          <h3>${report.title}</h3>
+          <div class="report-meta">
+            <div>By ${report.author}</div>
+            <div>${new Date(report.date).toLocaleDateString()}</div>
+          </div>
+          <div class="report-summary">${report.summary}</div>
+          <div class="report-actions">
+            <button onclick="viewReport(${report.id})" class="button">View</button>
+            <button onclick="editReport(${report.id})" class="button">Edit</button>
+            <button onclick="deleteReport(${report.id})" class="button secondary">Delete</button>
+          </div>
+        `;
+
+        container.appendChild(card);
+      });
+    }
+
+    function openReportForm(reportData = null) {
+      const modal = document.getElementById('reportFormModal');
+      const form = document.getElementById('reportForm');
+      
+      if (reportData) {
+        editingReportId = reportData.id;
+        form.title.value = reportData.title;
+        form.type.value = reportData.type;
+        form.author.value = reportData.author;
+        form.summary.value = reportData.summary;
+        form.content.value = reportData.content;
+      } else {
+        editingReportId = null;
+        form.reset();
+      }
+      
+      modal.style.display = 'block';
+    }
+
+    function closeReportForm() {
+      document.getElementById('reportFormModal').style.display = 'none';
+      editingReportId = null;
+    }
+
+    async function handleReportSubmit(event) {
+      event.preventDefault();
+      
+      const formData = new FormData(event.target);
+      const reportData = Object.fromEntries(formData);
+      
+      try {
+        const url = editingReportId 
+          ? `${API_BASE_URL}/api/reports/${editingReportId}`
+          : `${API_BASE_URL}/api/reports`;
+          
+        const response = await fetch(url, {
+          method: editingReportId ? 'PUT' : 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(reportData)
+        });
+
+        if (!response.ok) throw new Error('Failed to save report');
+        
+        await loadReports();
+        closeReportForm();
+        showSuccess('Report saved successfully');
+      } catch (error) {
+        showError('Error saving report: ' + error.message);
+      }
+    }
+
+    async function editReport(id) {
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/reports/${id}`);
+        if (!response.ok) throw new Error('Failed to fetch report');
+        
+        const report = await response.json();
+        openReportForm(report);
+      } catch (error) {
+        showError('Error loading report: ' + error.message);
+      }
+    }
+
+    async function deleteReport(id) {
+      if (!confirm('Are you sure you want to delete this report?')) return;
+      
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/reports/${id}`, {
+          method: 'DELETE'
+        });
+        
+        if (!response.ok) throw new Error('Failed to delete report');
+        
+        await loadReports();
+        showSuccess('Report deleted successfully');
+        } catch (error) {
+        showError('Error deleting report: ' + error.message);
+      }
+    }
+
+    // Event Listeners
+    document.getElementById('reportForm').addEventListener('submit', handleReportSubmit);
+    document.getElementById('reportSearch').addEventListener('input', debounce(() => loadReports(), 300));
+    document.getElementById('reportFilter').addEventListener('change', () => loadReports());
+
+    // Load reports when the page loads
+    document.addEventListener('DOMContentLoaded', () => {
+      loadReports();
+    });
+
+    // Add Font Awesome for icons
+    document.head.innerHTML += '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">';
+
+    // Initialize GCP Cloud Storage
+    let storage;
+    try {
+      storage = new Storage({
+        projectId: 'your-project-id',
+        keyFilename: 'path/to/service-account-key.json'
+      });
+    } catch (error) {
+      console.error('Error initializing Cloud Storage:', error);
+    }
+
+    // Document Management Functions
+    async function loadDocuments() {
+      try {
+        const searchTerm = document.getElementById('documentSearch').value || '';
+        const filterType = document.getElementById('documentFilter').value || 'all';
+        
+        const response = await fetch(`${API_BASE_URL}/api/documents?type=${filterType}&search=${searchTerm}`);
+        if (!response.ok) throw new Error('Failed to fetch documents');
+        
+        const documents = await response.json();
+        displayDocuments(documents);
+      } catch (error) {
+        showError('Error loading documents: ' + error.message);
+      }
+    }
+
+    function displayDocuments(documents) {
+      const container = document.getElementById('documentsContainer');
+      container.innerHTML = '';
+
+      if (!documents || documents.length === 0) {
+        container.innerHTML = '<div class="no-documents">No documents found. Upload a document to get started.</div>';
+        return;
+      }
+
+      documents.forEach(doc => {
+        const card = document.createElement('div');
+        card.className = 'document-card';
+        card.onclick = () => viewDocument(doc.id);
+        
+        const thumbnail = doc.thumbnailUrl || 'images/farmyield.png';
+        
+        card.innerHTML = `
+          <img src="${thumbnail}" alt="${doc.title}" class="document-thumbnail">
+          <div class="document-info">
+            <h3>${doc.title}</h3>
+            <div class="document-meta">
+              <span>${doc.type}</span>
+              <span>${new Date(doc.uploadDate).toLocaleDateString()}</span>
+            </div>
+            <div class="document-description">${doc.description}</div>
+          </div>
+        `;
+
+        container.appendChild(card);
+      });
+    }
+
+    function openDocumentUpload() {
+      document.getElementById('documentUploadModal').style.display = 'block';
+    }
+
+    function closeDocumentUpload() {
+      document.getElementById('documentUploadModal').style.display = 'none';
+      document.getElementById('documentUploadForm').reset();
+    }
+
+    async function handleDocumentUpload(event) {
+      event.preventDefault();
+      
+      // Show loading state
+      const submitBtn = event.target.querySelector('button[type="submit"]');
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Uploading...';
+      }
+      
+      try {
+        const form = event.target;
+        const formData = new FormData(form);
+        
+        // Validate file
+        const file = formData.get('file');
+        if (!file || file.size === 0) {
+          throw new Error('Please select a PDF file to upload');
+        }
+
+        // Check file type - only PDF
+        if (file.type !== 'application/pdf') {
+          throw new Error('Only PDF files are allowed');
+        }
+        
+        // Validate other fields
+        const title = formData.get('title');
+        const type = formData.get('type');
+        const description = formData.get('description');
+        
+        if (!title || !type || !description) {
+          throw new Error('Please fill in all required fields');
+        }
+        
+        console.log('Uploading document to server...');
+        console.log('File:', file.name, file.size, file.type);
+        
+        // Upload directly to our server API endpoint
+        const response = await fetch(`${API_BASE_URL}/api/documents`, {
+          method: 'POST',
+          body: formData // Send form data directly - includes file and metadata
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.error || 'Failed to upload document');
+        }
+        
+        const result = await response.json();
+        console.log('Upload success:', result);
+        
+        await loadDocuments();
+        closeDocumentUpload();
+        showSuccess('Document uploaded successfully');
+      } catch (error) {
+        console.error('Upload error:', error);
+        showError('Error uploading document: ' + error.message);
+      } finally {
+        // Reset button state
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Upload';
+        }
+      }
+    }
+
+    async function viewDocument(id) {
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/documents/${id}`);
+        if (!response.ok) throw new Error('Failed to fetch document');
+        
+        const doc = await response.json();
+        console.log('Document data:', doc);
+        
+        const modal = document.getElementById('documentViewModal');
+        document.getElementById('viewDocumentTitle').textContent = doc.title;
+        document.getElementById('viewDocumentType').textContent = doc.type;
+        document.getElementById('viewDocumentDate').textContent = new Date(doc.uploadDate).toLocaleDateString();
+        
+        // If we have a documentViewer (PDF.js viewer)
+        if (window.documentViewer && doc.fileUrl) {
+          console.log('Loading document in PDF viewer:', doc.fileUrl);
+          window.documentViewer.loadDocument(doc.fileUrl);
+        }
+        
+        modal.style.display = 'block';
+      } catch (error) {
+        console.error('View document error:', error);
+        showError('Error viewing document: ' + error.message);
+      }
+    }
+
+    // Initialize PDF Viewer
+    class PDFViewer {
+      constructor() {
+        this.pdfDoc = null;
+        this.pageNum = 1;
+        this.pageRendering = false;
+        this.pageNumPending = null;
+        this.scale = 1.0;
+        this.canvas = document.getElementById('pdfViewer');
+        this.ctx = this.canvas.getContext('2d');
+        this.loadingElement = document.querySelector('.pdf-loading');
+        this.errorElement = document.querySelector('.pdf-error');
+        this.pdfContainer = document.querySelector('.pdf-container');
+
+        this.initializeControls();
+      }
+
+      initializeControls() {
+        document.getElementById('prevPage').addEventListener('click', () => this.onPrevPage());
+        document.getElementById('nextPage').addEventListener('click', () => this.onNextPage());
+        document.getElementById('zoomIn').addEventListener('click', () => this.onZoomIn());
+        document.getElementById('zoomOut').addEventListener('click', () => this.onZoomOut());
+        document.getElementById('downloadPdf').addEventListener('click', () => this.onDownload());
+      }
+
+      async loadDocument(url) {
+        try {
+          this.showLoading();
+          this.hideError();
+          
+          const loadingTask = pdfjsLib.getDocument(url);
+          this.pdfDoc = await loadingTask.promise;
+          
+          document.getElementById('pageCount').textContent = this.pdfDoc.numPages;
+          this.renderPage(this.pageNum);
+          this.hideLoading();
+        } catch (error) {
+          console.error('Error loading PDF:', error);
+          this.showError('Failed to load PDF document.');
+          this.hideLoading();
+        }
+      }
+
+      async renderPage(num) {
+        this.pageRendering = true;
+        try {
+          const page = await this.pdfDoc.getPage(num);
+          const viewport = page.getViewport({ scale: this.scale });
+
+          this.canvas.height = viewport.height;
+          this.canvas.width = viewport.width;
+
+          const renderContext = {
+            canvasContext: this.ctx,
+            viewport: viewport
+          };
+
+          await page.render(renderContext).promise;
+          this.pageRendering = false;
+
+          if (this.pageNumPending !== null) {
+            this.renderPage(this.pageNumPending);
+            this.pageNumPending = null;
+          }
+
+          document.getElementById('pageNum').textContent = num;
+        } catch (error) {
+          console.error('Error rendering page:', error);
+          this.showError('Failed to render page.');
+          this.pageRendering = false;
+        }
+      }
+
+      queueRenderPage(num) {
+        if (this.pageRendering) {
+          this.pageNumPending = num;
+        } else {
+          this.renderPage(num);
+        }
+      }
+
+      onPrevPage() {
+        if (this.pageNum <= 1) return;
+        this.pageNum--;
+        this.queueRenderPage(this.pageNum);
+      }
+
+      onNextPage() {
+        if (this.pageNum >= this.pdfDoc.numPages) return;
+        this.pageNum++;
+        this.queueRenderPage(this.pageNum);
+      }
+
+      onZoomIn() {
+        this.scale = Math.min(this.scale * 1.25, 3.0);
+        document.getElementById('zoomLevel').textContent = `${Math.round(this.scale * 100)}%`;
+        this.queueRenderPage(this.pageNum);
+      }
+
+      onZoomOut() {
+        this.scale = Math.max(this.scale * 0.8, 0.5);
+        document.getElementById('zoomLevel').textContent = `${Math.round(this.scale * 100)}%`;
+        this.queueRenderPage(this.pageNum);
+      }
+
+      async onDownload() {
+        if (!this.pdfDoc) return;
+        try {
+          const data = await this.pdfDoc.getData();
+          const blob = new Blob([data], { type: 'application/pdf' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'document.pdf';
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+        } catch (error) {
+          console.error('Error downloading PDF:', error);
+          this.showError('Failed to download PDF.');
+        }
+      }
+
+      showLoading() {
+        this.loadingElement.style.display = 'flex';
+      }
+
+      hideLoading() {
+        this.loadingElement.style.display = 'none';
+      }
+
+      showError(message) {
+        this.errorElement.textContent = message;
+        this.errorElement.style.display = 'flex';
+      }
+
+      hideError() {
+        this.errorElement.style.display = 'none';
+      }
+    }
+
+    // Initialize PDF viewer when document is ready
+    document.addEventListener('DOMContentLoaded', () => {
+      window.pdfViewer = new PDFViewer();
+    });
+
+    // Function to load PDF when a document is clicked
+    function openPDFViewer(url) {
+      const modal = document.getElementById('documentModal');
+      modal.style.display = 'block';
+      window.pdfViewer.loadDocument(url);
+    }
+
+    async function savePdfChanges() {
+      try {
+        const text = document.getElementById('extractedText').textContent;
+        // Save changes to database
+        // You'll need to implement this based on your backend structure
+        showSuccess('Changes saved successfully');
+      } catch (error) {
+        showError('Error saving changes: ' + error.message);
+      }
+    }
+
+    function closeDocumentView() {
+      document.getElementById('documentViewModal').style.display = 'none';
+    }
+
+    // Utility function to load external scripts
+    function loadScript(src) {
+      return new Promise((resolve, reject) => {
+        const script = document.createElement('script');
+        script.src = src;
+        script.onload = resolve;
+        script.onerror = reject;
+        document.head.appendChild(script);
+      });
+    }
+
+    // Event Listeners
+    document.getElementById('documentUploadForm').addEventListener('submit', handleDocumentUpload);
+    document.getElementById('documentSearch').addEventListener('input', debounce(() => loadDocuments(), 300));
+    document.getElementById('documentFilter').addEventListener('change', () => loadDocuments());
+
+    // Load documents when the page loads
+    document.addEventListener('DOMContentLoaded', () => {
+      loadDocuments();
+    });
+  </script>
+  <script src="js/reporting.js"></script>
+  <script src="js/document-uploader-fix.js"></script>
+  <script src="js/simple-pdf-viewer.js"></script>
+  
+  <!-- PDF Viewer Modal -->
+  <div class="modal fade" id="pdfViewerModal" tabindex="-1" role="dialog" aria-labelledby="pdfViewerModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+      <div class="modal-content pdf-viewer">
+        <div class="modal-header">
+          <h5 class="modal-title" id="pdfViewerModalLabel">View Document</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="pdf-controls">
+            <div class="navigation-controls">
+              <button id="prevPage" class="btn btn-outline-secondary" title="Previous Page">
+                <i class="fas fa-chevron-left"></i>
+              </button>
+              <span class="page-info">
+                Page <span id="pageNum">1</span> of <span id="pageCount">1</span>
+              </span>
+              <button id="nextPage" class="btn btn-outline-secondary" title="Next Page">
+                <i class="fas fa-chevron-right"></i>
+              </button>
+            </div>
+            <div class="zoom-controls">
+              <button id="zoomOut" class="btn btn-outline-secondary" title="Zoom Out">
+                <i class="fas fa-search-minus"></i>
+              </button>
+              <button id="zoomIn" class="btn btn-outline-secondary" title="Zoom In">
+                <i class="fas fa-search-plus"></i>
+              </button>
+            </div>
+            <div class="action-controls">
+              <button id="copyText" class="btn btn-outline-secondary" title="Copy Text">
+                <i class="fas fa-copy"></i>
+              </button>
+              <button id="printPdf" class="btn btn-outline-secondary" title="Print">
+                <i class="fas fa-print"></i>
+              </button>
+              <a id="downloadPdf" class="btn btn-outline-secondary" title="Download" download>
+                <i class="fas fa-download"></i>
+              </a>
+            </div>
+          </div>
+          <div class="viewer-container">
+            <canvas id="pdfViewer"></canvas>
+            <div class="loading-overlay">
+              <div class="spinner"></div>
+              <p>Loading PDF...</p>
+            </div>
+          </div>
+          <div class="extracted-text" style="display: none;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Google Doc Embed Modal -->
+  <div class="modal fade" id="googleDocModal" tabindex="-1" role="dialog" aria-labelledby="googleDocModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="googleDocModalLabel">Google Document</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="gdoc-container">
+            <iframe id="googleDocFrame" class="gdoc-frame" frameborder="0" allowfullscreen></iframe>
+            <div class="gdoc-loading">
+              <div class="spinner"></div>
+              <p>Loading document...</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    .gdoc-container {
+      position: relative;
+      width: 100%;
+      height: 80vh;
+      background: #f8f9fa;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .gdoc-frame {
+      width: 100%;
+      height: 100%;
+      border: none;
+      background: white;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .gdoc-loading {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(255,255,255,0.9);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+
+    .gdoc-loading .spinner {
+      width: 50px;
+      height: 50px;
+      border: 3px solid #f3f3f3;
+      border-top: 3px solid #3498db;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-bottom: 15px;
+    }
+
+    .gdoc-loading p {
+      color: #2c3e50;
+      font-size: 1.1rem;
+      margin: 0;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .modal-xl {
+      max-width: 90vw;
+    }
+
+    .modal-content {
+      border-radius: 12px;
+      border: none;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+
+    .modal-header {
+      border-bottom: 1px solid #eee;
+      padding: 1rem 1.5rem;
+      background: #f8f9fa;
+    }
+
+    .modal-body {
+      padding: 1.5rem;
+    }
+
+    .modal-title {
+      color: #2c3e50;
+      font-weight: 600;
+    }
+
+    .close {
+      font-size: 1.5rem;
+      color: #6c757d;
+      opacity: 1;
+      transition: color 0.2s;
+    }
+
+    .close:hover {
+      color: #343a40;
+    }
+  </style>
+  <!-- JavaScript -->
+  <script src="js/main.js"></script>
+</body>
+</html> 

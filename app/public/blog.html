@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blog - RawFuelFoods</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <a href="index.html" class="logo">RawFuel<span>Foods</span></a>
+      <button id="nav-toggle" class="nav-toggle">☰</button>
+      <nav id="nav-menu" class="nav-menu">
+        <ul>
+          <li><a href="about.html">About & Contact</a></li>
+          <li class="dropdown">
+            <a href="farm.html" class="dropdown-toggle">Farms</a>
+            <ul class="dropdown-menu">
+              <li><a href="farm-locations.html">Locations</a></li>
+              <li><a href="farm-products.html">Products</a></li>
+              <li><a href="farm-partners.html">Partners</a></li>
+            </ul>
+          </li>
+          <li class="dropdown">
+            <a href="food.html" class="dropdown-toggle">Eat & Drink</a>
+            <ul class="dropdown-menu">
+              <li><a href="menu.html">Menu</a></li>
+              <li><a href="recipes.html">Recipes</a></li>
+              <li><a href="catering.html">Catering</a></li>
+            </ul>
+          </li>
+          <li class="dropdown">
+            <a href="health.html" class="dropdown-toggle">Health/Wellness</a>
+            <ul class="dropdown-menu">
+              <li><a href="nutrition.html">Nutrition</a></li>
+              <li><a href="programs.html">Programs</a></li>
+              <li><a href="resources.html">Resources</a></li>
+            </ul>
+          </li>
+          <li><a href="data-hub.html">Data Hub</a></li>
+          <li><a href="communications.html">Communications</a></li>
+          <li><a href="networks.html">Networks</a></li>
+          <li class="dropdown">
+            <a href="blog.html" class="dropdown-toggle active">Blog</a>
+            <ul class="dropdown-menu">
+              <li><a href="articles.html">Articles</a></li>
+              <li><a href="news.html">News</a></li>
+              <li><a href="stories.html">Stories</a></li>
+            </ul>
+          </li>
+          <li><a href="outdoors-rx.html">Outdoors RX</a></li>
+          <li><a href="events.html">Events</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <div class="page-header container">
+      <h1>Blog</h1>
+      <p>Latest insights on plant-based nutrition and urban farming</p>
+    </div>
+
+    <div class="page-content container">
+      <div class="blog-grid" id="blogPosts">
+        <!-- Blog posts will be loaded here dynamically -->
+        <div class="loading">Loading posts...</div>
+      </div>
+    </div>
+
+    <footer class="site-footer container">
+      <p>Call 206.718.9951 | rawfuelfoods@gmail.com</p>
+    </footer>
+  </main>
+
+  <script src="js/main.js"></script>
+  <script>
+    // Load blog posts
+    async function loadBlogPosts() {
+      try {
+        const response = await fetch('/api/blog-posts');
+        const posts = await response.json();
+        
+        const blogGrid = document.getElementById('blogPosts');
+        blogGrid.innerHTML = posts.map(post => `
+          <article class="blog-post">
+            ${post.cover_image ? `<img src="${post.cover_image}" alt="${post.title}">` : ''}
+            <div class="blog-post-content">
+              <h2><a href="/blog/${post.slug}">${post.title}</a></h2>
+              <p class="post-date">${new Date(post.published_at).toLocaleDateString()}</p>
+              <p class="post-excerpt">${post.excerpt || ''}</p>
+              <a href="/blog/${post.slug}" class="btn">Read More</a>
+            </div>
+          </article>
+        `).join('');
+      } catch (error) {
+        document.getElementById('blogPosts').innerHTML = '<p>Error loading blog posts. Please try again later.</p>';
+      }
+    }
+
+    // Load posts when page loads
+    window.addEventListener('load', loadBlogPosts);
+  </script>
+</body>
+</html> 

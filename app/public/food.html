@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eat & Drink - RawFuelFoods</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    .hero {
+      background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+                  url('images/eat&dring.png');
+      background-size: cover;
+      background-position: center;
+      color: white;
+      padding: 6rem 0;
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+
+    .hero h1 {
+      font-size: 3.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .hero p {
+      font-size: 1.2rem;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .content-section {
+      padding: 4rem 0;
+    }
+
+    .content-section:nth-child(even) {
+      background: #f8f9fa;
+    }
+
+    .section-image {
+      width: 100%;
+      max-width: 800px;
+      margin: 2rem auto;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      display: block;
+    }
+
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .menu-card {
+      background: white;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .menu-card h3 {
+      color: #2c3e50;
+      margin-bottom: 1rem;
+    }
+
+    .menu-item {
+      margin-bottom: 1rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid #eee;
+    }
+
+    .menu-item:last-child {
+      border-bottom: none;
+    }
+
+    .menu-item h4 {
+      margin-bottom: 0.5rem;
+    }
+
+    .menu-item p {
+      color: #666;
+      font-size: 0.9rem;
+    }
+
+    .price {
+      color: #2c3e50;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <a href="index.html" class="logo">RawFuel<span>Foods</span></a>
+      <nav class="nav-menu">
+        <ul>
+          <li><a href="about.html">About & Contact</a></li>
+          <li><a href="farm.html">Farms</a></li>
+          <li><a href="food.html" class="active">Eat & Drink</a></li>
+          <li><a href="health.html">Health/Wellness</a></li>
+          <li><a href="data-hub.html">Data Hub</a></li>
+          <li><a href="communications.html">Communications</a></li>
+          <li><a href="networks.html">Networks</a></li>
+          <li><a href="blog.html">Blog</a></li>
+          <li><a href="outdoors-rx.html">Outdoors RX</a></li>
+          <li><a href="events.html">Events</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <section class="hero">
+      <div class="container">
+        <h1>Eat & Drink</h1>
+        <p>Experience the fresh flavors of sustainable urban farming</p>
+      </div>
+    </section>
+
+    <section class="content-section">
+      <div class="container">
+        <h2>Farm to Table Excellence</h2>
+        <p>At RawFuelFoods, we believe in the power of fresh, locally-sourced ingredients to create extraordinary culinary experiences. Our farm-to-table approach ensures that every dish we serve captures the essence of sustainable urban farming while delivering exceptional taste and nutritional value. We carefully select and harvest produce from our urban farms daily, guaranteeing that you receive the freshest, most flavorful ingredients in every meal.</p>
+        <p>Our commitment to sustainability extends beyond our farming practices to our kitchen, where we utilize innovative cooking techniques that preserve the natural flavors and nutritional benefits of our ingredients. Every dish is thoughtfully crafted to showcase the unique characteristics of our farm-fresh produce, creating a dining experience that is both delicious and environmentally conscious.</p>
+        <img src="images/eat&dring.png" alt="Farm to Table Dining" class="section-image">
+      </div>
+    </section>
+
+    <section class="content-section">
+      <div class="container">
+        <h2>Our Menu</h2>
+        <p>Our seasonal menu celebrates the abundance of our urban farms, featuring creative dishes that highlight the natural flavors of our fresh produce. Each recipe is carefully developed to maximize nutrition while delivering exceptional taste, proving that healthy eating can be both satisfying and delicious.</p>
+        <p>We take pride in offering a diverse selection of plant-based options that cater to various dietary preferences and restrictions. Our chefs work closely with our urban farmers to ensure that each ingredient is harvested at its peak, allowing us to create dishes that showcase the best of each season.</p>
+        <div class="menu-grid">
+          <div class="menu-card">
+            <h3>Fresh Bowls</h3>
+            <div class="menu-item">
+              <h4>Urban Harvest Bowl</h4>
+              <p>Fresh mixed greens, roasted vegetables, quinoa, and house-made dressing</p>
+              <span class="price">$12</span>
+            </div>
+            <div class="menu-item">
+              <h4>Power Green Bowl</h4>
+              <p>Kale, spinach, microgreens, avocado, and protein-rich toppings</p>
+              <span class="price">$14</span>
+            </div>
+          </div>
+          <div class="menu-card">
+            <h3>Smoothies</h3>
+            <div class="menu-item">
+              <h4>Green Vitality</h4>
+              <p>Spinach, kale, apple, banana, and ginger</p>
+              <span class="price">$8</span>
+            </div>
+            <div class="menu-item">
+              <h4>Berry Boost</h4>
+              <p>Mixed berries, banana, almond milk, and plant-based protein</p>
+              <span class="price">$9</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-section">
+      <div class="container">
+        <h2>Catering Services</h2>
+        <p>Bring the fresh flavors of RawFuelFoods to your next event with our professional catering services. We offer customizable menus that feature our farm-fresh ingredients and can accommodate various dietary preferences and event sizes. Our experienced team works closely with clients to create memorable dining experiences that reflect our commitment to sustainability and exceptional taste.</p>
+        <p>Whether you're planning a corporate lunch, private dinner party, or special celebration, our catering team will ensure that your event is complemented by delicious, nutritious, and beautifully presented dishes that showcase the best of our urban farms. Contact us to learn more about our catering options and to start planning your next event.</p>
+        <img src="images/urbanfarming.png" alt="Catering Services" class="section-image">
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer container">
+    <p>Call 206.718.9951 | rawfuelfoods@gmail.com</p>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html> 

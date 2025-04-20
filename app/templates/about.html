@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About & Contact - RawFuelFoods</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <a href="index.html" class="logo">RawFuel<span>Foods</span></a>
+      <button id="nav-toggle" class="nav-toggle">☰</button>
+      <nav id="nav-menu" class="nav-menu">
+        <ul>
+          <li><a href="about.html" class="active">About & Contact</a></li>
+          <li class="dropdown">
+            <a href="farm.html" class="dropdown-toggle">Farms</a>
+            <ul class="dropdown-menu">
+              <li><a href="farm-locations.html">Locations</a></li>
+              <li><a href="farm-products.html">Products</a></li>
+              <li><a href="farm-partners.html">Partners</a></li>
+            </ul>
+          </li>
+          <li class="dropdown">
+            <a href="food.html" class="dropdown-toggle">Eat & Drink</a>
+            <ul class="dropdown-menu">
+              <li><a href="menu.html">Menu</a></li>
+              <li><a href="recipes.html">Recipes</a></li>
+              <li><a href="catering.html">Catering</a></li>
+            </ul>
+          </li>
+          <li class="dropdown">
+            <a href="health.html" class="dropdown-toggle">Health/Wellness</a>
+            <ul class="dropdown-menu">
+              <li><a href="nutrition.html">Nutrition</a></li>
+              <li><a href="programs.html">Programs</a></li>
+              <li><a href="resources.html">Resources</a></li>
+            </ul>
+          </li>
+          <li><a href="data-hub.html">Data Hub</a></li>
+          <li><a href="communications.html">Communications</a></li>
+          <li><a href="networks.html">Networks</a></li>
+          <li class="dropdown">
+            <a href="blog.html" class="dropdown-toggle">Blog</a>
+            <ul class="dropdown-menu">
+              <li><a href="articles.html">Articles</a></li>
+              <li><a href="news.html">News</a></li>
+              <li><a href="stories.html">Stories</a></li>
+            </ul>
+          </li>
+          <li><a href="outdoors-rx.html">Outdoors RX</a></li>
+          <li><a href="events.html">Events</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <div class="page-header container">
+      <h1>About Us</h1>
+    </div>
+
+    <div class="page-content container">
+      <section class="about-section">
+        <h2>Our Mission</h2>
+        <p>RawFuelFoods is dedicated to promoting plant-based nutrition and sustainable urban farming. We believe in creating a healthier community through education, accessibility, and innovation in food production.</p>
+        
+        <h2>Our Story</h2>
+        <p>Founded with a vision to transform urban spaces into productive food gardens, RawFuelFoods has grown into a comprehensive resource for plant-based nutrition and sustainable farming practices.</p>
+      </section>
+
+      <section class="contact-section">
+        <h2>Contact Us</h2>
+        <form class="contact-form" id="contactForm">
+          <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="subject">Subject</label>
+            <input type="text" id="subject" name="subject" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="message">Message</label>
+            <textarea id="message" name="message" required></textarea>
+          </div>
+          
+          <button type="submit" class="btn">Send Message</button>
+        </form>
+      </section>
+    </div>
+
+    <footer class="site-footer container">
+      <p>Call 206.718.9951 | rawfuelfoods@gmail.com</p>
+    </footer>
+  </main>
+
+  <script>
+    const express = require('express');
+const router = express.Router();
+const db = require('../config/database');
+const { authenticateToken } = require('../middleware/auth');
+
+// Farm Data Routes
+router.get('/farm-data', async (req, res) => {
+  try {
+    const { rows } = await db.query(
+      'SELECT * FROM farm_data ORDER BY created_at DESC'
+    );
+    res.json(rows);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+router.post('/farm-data', authenticateToken, async (req, res) => {
+  const {
+    farm_id,
+    crop_type,
+    yield_amount,
+    planting_date,
+    harvest_date,
+    area_sqft,
+    resource_usage,
+    notes
+  } = req.body;
+
+  try {
+    const { rows } = await db.query(
+      `INSERT INTO farm_data (farm_id, crop_type, yield_amount, planting_date, 
+        harvest_date, area_sqft, resource_usage, notes)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+       RETURNING *`,
+      [farm_id, crop_type, yield_amount, planting_date, harvest_date, area_sqft, resource_usage, notes]
+    );
+    res.status(201).json(rows[0]);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Resource Metrics Routes
+router.get('/resource-metrics', async (req, res) => {
+  try {
+    const { rows } = await db.query(
+      'SELECT * FROM resource_metrics ORDER BY recorded_date DESC'
+    );
+    res.json(rows);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+router.post('/resource-metrics', authenticateToken, async (req, res) => {
+  const { farm_id, metric_type, value, unit, recorded_date, notes } = req.body;
+
+  try {
+    const { rows } = await db.query(
+      `INSERT INTO resource_metrics (farm_id, metric_type, value, unit, recorded_date, notes)
+       VALUES ($1, $2, $3, $4, $5, $6)
+       RETURNING *`,
+      [farm_id, metric_type, value, unit, recorded_date, notes]
+    );
+    res.status(201).json(rows[0]);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Community Impact Routes
+router.get('/community-impact', async (req, res) => {
+  try {
+    const { rows } = await db.query(
+      'SELECT * FROM community_impact ORDER BY event_date DESC'
+    );
+    res.json(rows);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+router.post('/community-impact', authenticateToken, async (req, res) => {
+  const {
+    program_type,
+    participant_count,
+    impact_metrics,
+    event_date,
+    location,
+    feedback_score,
+    notes
+  } = req.body;
+
+  try {
+    const { rows } = await db.query(
+      `INSERT INTO community_impact (program_type, participant_count, impact_metrics,
+        event_date, location, feedback_score, notes)
+       VALUES ($1, $2, $3, $4, $5, $6, $7)
+       RETURNING *`,
+      [program_type, participant_count, impact_metrics, event_date, location, feedback_score, notes]
+    );
+    res.status(201).json(rows[0]);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Sustainability Metrics Routes
+router.get('/sustainability-metrics', async (req, res) => {
+  try {
+    const { rows } = await db.query(
+      'SELECT * FROM sustainability_metrics ORDER BY measurement_date DESC'
+    );
+    res.json(rows);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+router.post('/sustainability-metrics', authenticateToken, async (req, res) => {
+  const { metric_type, value, unit, measurement_date, category, notes } = req.body;
+
+  try {
+    const { rows } = await db.query(
+      `INSERT INTO sustainability_metrics (metric_type, value, unit, measurement_date, category, notes)
+       VALUES ($1, $2, $3, $4, $5, $6)
+       RETURNING *`,
+      [metric_type, value, unit, measurement_date, category, notes]
+    );
+    res.status(201).json(rows[0]);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Data Visualizations Routes
+router.get('/visualizations', async (req, res) => {
+  try {
+    const { rows } = await db.query(
+      'SELECT * FROM data_visualizations WHERE is_public = true ORDER BY created_at DESC'
+    );
+    res.json(rows);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+router.post('/visualizations', authenticateToken, async (req, res) => {
+  const { title, description, chart_type, data_source, configuration, is_public } = req.body;
+
+  try {
+    const { rows } = await db.query(
+      `INSERT INTO data_visualizations (title, description, chart_type, data_source, configuration, is_public)
+       VALUES ($1, $2, $3, $4, $5, $6)
+       RETURNING *`,
+      [title, description, chart_type, data_source, configuration, is_public]
+    );
+    res.status(201).json(rows[0]);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Reports Routes
+router.get('/reports', async (req, res) => {
+  try {
+    const { rows } = await db.query(
+      'SELECT * FROM reports WHERE is_public = true ORDER BY published_date DESC'
+    );
+    res.json(rows);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+router.post('/reports', authenticateToken, async (req, res) => {
+  const {
+    title,
+    description,
+    report_type,
+    content,
+    author,
+    published_date,
+    is_public
+  } = req.body;
+
+  try {
+    const { rows } = await db.query(
+      `INSERT INTO reports (title, description, report_type, content, author, published_date, is_public)
+       VALUES ($1, $2, $3, $4, $5, $6, $7)
+       RETURNING *`,
+      [title, description, report_type, content, author, published_date, is_public]
+    );
+    res.status(201).json(rows[0]);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Analytics Routes
+router.get('/analytics/farm-performance', async (req, res) => {
+  try {
+    const { rows } = await db.query(`
+      SELECT 
+        f.crop_type,
+        SUM(f.yield_amount) as total_yield,
+        AVG(f.yield_amount / f.area_sqft) as yield_per_sqft,
+        COUNT(*) as harvest_count
+      FROM farm_data f
+      GROUP BY f.crop_type
+      ORDER BY total_yield DESC
+    `);
+    res.json(rows);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+router.get('/analytics/resource-efficiency', async (req, res) => {
+  try {
+    const { rows } = await db.query(`
+      SELECT 
+        r.metric_type,
+        AVG(r.value) as avg_value,
+        MIN(r.value) as min_value,
+        MAX(r.value) as max_value
+      FROM resource_metrics r
+      GROUP BY r.metric_type
+    `);
+    res.json(rows);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+router.get('/analytics/community-engagement', async (req, res) => {
+  try {
+    const { rows } = await db.query(`
+      SELECT 
+        c.program_type,
+        SUM(c.participant_count) as total_participants,
+        AVG(c.feedback_score) as avg_feedback
+      FROM community_impact c
+      GROUP BY c.program_type
+      ORDER BY total_participants DESC
+    `);
+    res.json(rows);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+module.exports = router; 
+  </script>
+  <script>
+    // Contact form handling
+    document.getElementById('contactForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const formData = new FormData(e.target);
+      try {
+        const response = await fetch('/api/contact', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(Object.fromEntries(formData)),
+        });
+        if (response.ok) {
+          alert('Message sent successfully!');
+          e.target.reset();
+        } else {
+          throw new Error('Failed to send message');
+        }
+      } catch (error) {
+        alert('Error sending message. Please try again.');
+      }
+    });
+  </script>
+</body>
+</html> 

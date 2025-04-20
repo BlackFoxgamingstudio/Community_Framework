@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Library Framework Documentation</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --text-color: #333;
+            --code-bg: #f8f9fa;
+            --border-color: #ddd;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 280px;
+            height: 100vh;
+            background: var(--primary-color);
+            padding: 20px;
+            color: white;
+            overflow-y: auto;
+        }
+
+        nav ul {
+            list-style: none;
+        }
+
+        nav ul li {
+            margin: 10px 0;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 0.9em;
+        }
+
+        nav ul li a:hover {
+            color: var(--secondary-color);
+        }
+
+        main {
+            margin-left: 300px;
+            padding: 20px;
+        }
+
+        h1, h2, h3 {
+            color: var(--primary-color);
+            margin: 1.5em 0 0.5em 0;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            border-bottom: 2px solid var(--secondary-color);
+            padding-bottom: 10px;
+        }
+
+        h2 {
+            font-size: 1.8em;
+        }
+
+        h3 {
+            font-size: 1.3em;
+        }
+
+        p {
+            margin: 1em 0;
+            text-align: justify;
+        }
+
+        code {
+            background: var(--code-bg);
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.9em;
+        }
+
+        pre {
+            background: var(--code-bg);
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 1em 0;
+            border: 1px solid var(--border-color);
+        }
+
+        .warning {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 1em 0;
+        }
+
+        .info {
+            background: #cce5ff;
+            border-left: 4px solid #007bff;
+            padding: 15px;
+            margin: 1em 0;
+        }
+
+        .step {
+            background: white;
+            padding: 20px;
+            margin: 1em 0;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .implementation-note {
+            background: #e8f5e9;
+            border-left: 4px solid #4caf50;
+            padding: 15px;
+            margin: 1em 0;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <h2>Contents</h2>
+        <ul>
+            <li><a href="#introduction">Introduction</a></li>
+            <li><a href="#prerequisites">Prerequisites</a></li>
+            <li><a href="#google-cloud-setup">Google Cloud Setup</a></li>
+            <li><a href="#project-structure">Project Structure</a></li>
+            <li><a href="#database-setup">Database Setup</a></li>
+            <li><a href="#implementation">Implementation</a>
+                <ul>
+                    <li><a href="#models">Models</a></li>
+                    <li><a href="#storage">Storage</a></li>
+                    <li><a href="#api">API</a></li>
+                    <li><a href="#frontend">Frontend</a></li>
+                </ul>
+            </li>
+            <li><a href="#configuration">Configuration</a></li>
+            <li><a href="#deployment">Deployment</a></li>
+            <li><a href="#security">Security Considerations</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <h1>PDF Library Framework Documentation</h1>
+        
+        <section id="introduction">
+            <h2>Introduction</h2>
+            <p>
+                The PDF Library Framework is a comprehensive solution for building and managing private digital libraries within communities. This framework extends the Library of Kemet project to provide robust PDF document management capabilities, including secure storage, metadata management, access control, and community engagement features.
+            </p>
+            <p>
+                Built on modern web technologies and cloud infrastructure, this framework enables organizations to create their own digital libraries with features like document versioning, collaborative annotations, advanced search capabilities, and granular access controls. The system is designed to handle large-scale document collections while maintaining high performance and security standards.
+            </p>
+            <p>
+                This documentation provides detailed technical information about setting up, implementing, and deploying the PDF Library Framework, including best practices for security, scalability, and maintenance.
+            </p>
+        </section>
+
+        <section id="prerequisites">
+            <h2>Prerequisites</h2>
+            <div class="step">
+                <h3>Development Environment</h3>
+                <p>
+                    Before beginning implementation, ensure your development environment meets the following requirements:
+                    <ul>
+                        <li>Python 3.8 or higher</li>
+                        <li>Node.js 14.x or higher</li>
+                        <li>MongoDB 4.4 or higher</li>
+                        <li>Git</li>
+                    </ul>
+                </p>
+                <p>
+                    The framework relies on several key technologies and services that must be properly configured. These include Python for backend development, MongoDB for document metadata storage, and Google Cloud Storage for PDF file storage. Additionally, you'll need development tools like VS Code or PyCharm, and familiarity with REST APIs and async programming patterns.
+                </p>
+            </div>
+        </section>
+
+        <section id="google-cloud-setup">
+            <h2>Google Cloud Setup</h2>
+            <div class="step">
+                <h3>Initial Setup</h3>
+                <p>
+                    Setting up Google Cloud Storage requires several careful steps to ensure secure and efficient operation. First, create a new Google Cloud Project through the Google Cloud Console. This project will house your storage buckets and authentication credentials. Navigate to the Google Cloud Console, click on "New Project," and follow the creation wizard. Make note of your Project ID, as it will be needed in later configuration steps.
+                </p>
+                <p>
+                    After project creation, you need to enable the necessary APIs. In the Google Cloud Console, navigate to "APIs & Services" > "Library" and enable the following:
+                    <ul>
+                        <li>Cloud Storage API</li>
+                        <li>Cloud Storage JSON API</li>
+                        <li>Identity and Access Management (IAM) API</li>
+                    </ul>
+                </p>
+                <pre><code>
+# Example Google Cloud Storage configuration
+{
+    "type": "service_account",
+    "project_id": "your-project-id",
+    "private_key_id": "your-private-key-id",
+    "private_key": "your-private-key",
+    "client_email": "your-service-account-email",
+    "client_id": "your-client-id",
+    "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+    "token_uri": "https://oauth2.googleapis.com/token",
+    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+    "client_x509_cert_url": "your-cert-url"
+}
+                </code></pre>
+            </div>
+
+            <div class="step">
+                <h3>Service Account Setup</h3>
+                <p>
+                    Create a service account for your application to authenticate with Google Cloud Storage. In the Google Cloud Console, navigate to "IAM & Admin" > "Service Accounts" and click "Create Service Account." Give it a descriptive name and grant it the "Storage Object Admin" role for full control over storage objects. After creation, generate and download a JSON key file containing the service account credentials.
+                </p>
+                <p>
+                    The service account credentials should be stored securely and never committed to version control. Create a dedicated configuration directory in your project and add it to your .gitignore file. Store the JSON key file in this directory and reference it through environment variables or a secure configuration management system.
+                </p>
+            </div>
+        </section>
+
+        <section id="project-structure">
+            <h2>Project Structure</h2>
+            <pre><code>
+pdf_library/
+├── config/
+│   ├── __init__.py
+│   ├── settings.py
+│   └── gcloud_key.json
+├── models/
+│   ├── __init__.py
+│   ├── pdf_document.py
+│   └── library.py
+├── storage/
+│   ├── __init__.py
+│   ├── gcs_handler.py
+│   └── file_processor.py
+├── api/
+│   ├── __init__.py
+│   ├── routes.py
+│   ├── validators.py
+│   └── controllers.py
+├── static/
+│   ├── css/
+│   ├── js/
+│   └── img/
+├── templates/
+│   ├── library/
+│   ├── document/
+│   └── shared/
+├── tests/
+│   ├── __init__.py
+│   ├── test_models.py
+│   └── test_api.py
+├── utils/
+│   ├── __init__.py
+│   ├── pdf_tools.py
+│   └── security.py
+├── requirements.txt
+└── app.py
+            </code></pre>
+            <p>
+                The project structure follows a modular design pattern that separates concerns and promotes maintainability. The core functionality is organized into distinct packages, each handling specific aspects of the PDF library system. This organization allows for easy scaling and modification of individual components without affecting the entire system.
+            </p>
+            <p>
+                Each directory serves a specific purpose in the framework:
+                <ul>
+                    <li><strong>config/</strong>: Contains all configuration files and environment-specific settings</li>
+                    <li><strong>models/</strong>: Defines the data models and database interaction layer</li>
+                    <li><strong>storage/</strong>: Handles file storage and retrieval operations</li>
+                    <li><strong>api/</strong>: Implements the REST API endpoints and business logic</li>
+                    <li><strong>static/</strong>: Houses static assets like CSS, JavaScript, and images</li>
+                    <li><strong>templates/</strong>: Contains the HTML templates for the web interface</li>
+                    <li><strong>tests/</strong>: Includes unit tests and integration tests</li>
+                    <li><strong>utils/</strong>: Provides utility functions and helper classes</li>
+                </ul>
+            </p>
+        </section>
+
+        <section id="database-setup">
+            <h2>Database Setup</h2>
+            <div class="step">
+                <h3>MongoDB Configuration</h3>
+                <p>
+                    The framework uses MongoDB as its primary database for storing document metadata and library information. MongoDB was chosen for its flexibility in handling document-based data structures and its powerful querying capabilities. The database schema is designed to optimize performance for common operations like searching, filtering, and aggregating document metadata.
+                </p>
+                <p>
+                    To set up MongoDB, you'll need to create a new database and configure the appropriate collections. The following collections are required:
+                    <ul>
+                        <li>pdf_documents</li>
+                        <li>libraries</li>
+                        <li>users</li>
+                        <li>permissions</li>
+                        <li>analytics</li>
+                    </ul>
+                </p>
+                <pre><code>
+# MongoDB initialization script
+use pdf_library_db
+
+db.createCollection('pdf_documents', {
+    validator: {
+        $jsonSchema: {
+            bsonType: 'object',
+            required: ['title', 'storage_path', 'uploader', 'upload_date'],
+            properties: {
+                title: {
+                    bsonType: 'string',
+                    description: 'Document title - required'
+                },
+                storage_path: {
+                    bsonType: 'string',
+                    description: 'GCS storage path - required'
+                },
+                uploader: {
+                    bsonType: 'objectId',
+                    description: 'User ID of uploader - required'
+                },
+                upload_date: {
+                    bsonType: 'date',
+                    description: 'Upload timestamp - required'
+                }
+            }
+        }
+    }
+})
+
+# Create indexes for optimal query performance
+db.pdf_documents.createIndex({ title: 'text', description: 'text' })
+db.pdf_documents.createIndex({ uploader: 1 })
+db.pdf_documents.createIndex({ upload_date: -1 })
+                </code></pre>
+            </div>
+        </section>
+
+        <section id="implementation">
+            <h2>Implementation</h2>
+            
+            <div class="step" id="models">
+                <h3>Models Implementation</h3>
+                <p>
+                    The models layer implements the core data structures and database interactions. Each model class corresponds to a MongoDB collection and provides methods for CRUD operations and data validation. The implementation uses PyMongo for database interactions and includes support for asynchronous operations.
+                </p>
+                <pre><code>
+# models/pdf_document.py
+from datetime import datetime
+from bson import ObjectId
+from pymongo import MongoClient
+from typing import Dict, List, Optional
+
+class PDFDocument:
+    def __init__(self, db_client: MongoClient):
+        self.collection = db_client.pdf_library_db.pdf_documents
+
+    async def create(self, document_data: Dict) -> ObjectId:
+        """Create a new PDF document entry"""
+        document_data['upload_date'] = datetime.utcnow()
+        result = await self.collection.insert_one(document_data)
+        return result.inserted_id
+
+    async def get_by_id(self, document_id: str) -> Optional[Dict]:
+        """Retrieve a document by ID"""
+        return await self.collection.find_one({'_id': ObjectId(document_id)})
+
+    async def update(self, document_id: str, update_data: Dict) -> bool:
+        """Update document metadata"""
+        result = await self.collection.update_one(
+            {'_id': ObjectId(document_id)},
+            {'$set': update_data}
+        )
+        return result.modified_count > 0
+
+    async def delete(self, document_id: str) -> bool:
+        """Delete a document"""
+        result = await self.collection.delete_one({'_id': ObjectId(document_id)})
+        return result.deleted_count > 0
+                </code></pre>
+            </div>
+
+            <div class="step" id="storage">
+                <h3>Storage Implementation</h3>
+                <p>
+                    The storage layer handles file operations with Google Cloud Storage. It includes functionality for secure file uploads, downloads, and temporary URL generation. The implementation includes retry logic for failed operations and proper error handling.
+                </p>
+                <pre><code>
+# storage/gcs_handler.py
+from google.cloud import storage
+from google.cloud.exceptions import GoogleCloudError
+import asyncio
+from typing import BinaryIO, Optional
+
+class GCSStorageHandler:
+    def __init__(self, bucket_name: str, credentials_path: str):
+        self.client = storage.Client.from_service_account_json(credentials_path)
+        self.bucket = self.client.bucket(bucket_name)
+
+    async def upload_file(self, 
+                         file_obj: BinaryIO, 
+                         destination_path: str,
+                         content_type: str = 'application/pdf') -> str:
+        """Upload a file to GCS with retry logic"""
+        max_retries = 3
+        retry_delay = 1  # seconds
+
+        for attempt in range(max_retries):
+            try:
+                blob = self.bucket.blob(destination_path)
+                blob.content_type = content_type
+                
+                # Perform the upload
+                await asyncio.to_thread(
+                    blob.upload_from_file,
+                    file_obj,
+                    content_type=content_type
+                )
+                
+                return blob.public_url
+                
+            except GoogleCloudError as e:
+                if attempt == max_retries - 1:
+                    raise
+                await asyncio.sleep(retry_delay * (attempt + 1))
+                continue
+                </code></pre>
+            </div>
+
+            <div class="step" id="api">
+                <h3>API Implementation</h3>
+                <p>
+                    The API layer provides RESTful endpoints for interacting with the PDF library system. It includes routes for document management, library administration, and user interactions. The implementation uses Flask for routing and includes proper request validation and error handling.
+                </p>
+                <pre><code>
+# api/routes.py
+from flask import Blueprint, request, jsonify
+from werkzeug.exceptions import BadRequest
+from .controllers import PDFController
+from .validators import validate_upload_request
+
+pdf_api = Blueprint('pdf_api', __name__)
+controller = PDFController()
+
+@pdf_api.route('/documents', methods=['POST'])
+async def upload_document():
+    """Handle document upload"""
+    try:
+        # Validate request
+        if 'file' not in request.files:
+            raise BadRequest('No file provided')
+            
+        file = request.files['file']
+        metadata = request.form.to_dict()
+        
+        # Validate metadata
+        validate_upload_request(metadata)
+        
+        # Process upload
+        document_id = await controller.process_upload(file, metadata)
+        
+        return jsonify({
+            'status': 'success',
+            'document_id': str(document_id)
+        }), 201
+        
+    except BadRequest as e:
+        return jsonify({
+            'status': 'error',
+            'message': str(e)
+        }), 400
+    except Exception as e:
+        return jsonify({
+            'status': 'error',
+            'message': 'Internal server error'
+        }), 500
+                </code></pre>
+            </div>
+
+            <div class="step" id="frontend">
+                <h3>Frontend Implementation</h3>
+                <p>
+                    The frontend implementation provides a user-friendly interface for interacting with the PDF library. It includes features for document upload, browsing, search, and management. The implementation uses modern JavaScript practices and includes responsive design elements.
+                </p>
+                <pre><code>
+// static/js/pdf-uploader.js
+class PDFUploader {
+    constructor(uploadEndpoint, options = {}) {
+        this.endpoint = uploadEndpoint;
+        this.options = {
+            maxFileSize: options.maxFileSize || 50 * 1024 * 1024, // 50MB
+            allowedTypes: options.allowedTypes || ['application/pdf'],
+            onProgress: options.onProgress || (() => {}),
+            onSuccess: options.onSuccess || (() => {}),
+            onError: options.onError || (() => {})
+        };
+    }
+
+    async uploadFile(file, metadata) {
+        // Validate file
+        if (!this.validateFile(file)) {
+            throw new Error('Invalid file');
+        }
+
+        const formData = new FormData();
+        formData.append('file', file);
+        
+        // Add metadata
+        Object.entries(metadata).forEach(([key, value]) => {
+            formData.append(key, value);
+        });
+
+        try {
+            const response = await fetch(this.endpoint, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'Accept': 'application/json'
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Upload failed');
+            }
+
+            const result = await response.json();
+            this.options.onSuccess(result);
+            return result;
+
+        } catch (error) {
+            this.options.onError(error);
+            throw error;
+        }
+    }
+
+    validateFile(file) {
+        return (
+            file.size <= this.options.maxFileSize &&
+            this.options.allowedTypes.includes(file.type)
+        );
+    }
+}
+                </code></pre>
+            </div>
+        </section>
+
+        <section id="configuration">
+            <h2>Configuration</h2>
+            <div class="step">
+                <h3>Environment Configuration</h3>
+                <p>
+                    The framework uses a hierarchical configuration system that supports different environments (development, staging, production). Configuration values are loaded from environment variables and configuration files, with environment variables taking precedence.
+                </p>
+                <pre><code>
+# config/settings.py
+import os
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
+
+class BaseConfig:
+    # Application settings
+    SECRET_KEY = os.getenv('SECRET_KEY')
+    DEBUG = False
+    
+    # MongoDB settings
+    MONGO_URI = os.getenv('MONGO_URI')
+    
+    # Google Cloud Storage settings
+    GCS_BUCKET = os.getenv('GCS_BUCKET')
+    GCS_CREDENTIALS = os.getenv('GCS_CREDENTIALS_PATH')
+    
+    # PDF processing settings
+    MAX_CONTENT_LENGTH = 50 * 1024 * 1024  # 50MB
+    ALLOWED_EXTENSIONS = {'pdf'}
+    
+    # Security settings
+    SESSION_COOKIE_SECURE = True
+    PERMANENT_SESSION_LIFETIME = 1800  # 30 minutes
+
+class DevelopmentConfig(BaseConfig):
+    DEBUG = True
+    SESSION_COOKIE_SECURE = False
+
+class ProductionConfig(BaseConfig):
+    # Production-specific settings
+    pass
+
+# Configuration dictionary
+config = {
+    'development': DevelopmentConfig,
+    'production': ProductionConfig,
+    'default': DevelopmentConfig
+}
+                </code></pre>
+            </div>
+        </section>
+
+        <section id="deployment">
+            <h2>Deployment</h2>
+            <div class="step">
+                <h3>Deployment Process</h3>
+                <p>
+                    The deployment process involves several steps to ensure the application is properly set up in a production environment. This includes setting up the web server, configuring SSL certificates, and establishing monitoring and logging systems.
+                </p>
+                <pre><code>
+# Example deployment script
+#!/bin/bash
+
+# Update system packages
+apt-get update
+apt-get upgrade -y
+
+# Install dependencies
+apt-get install -y python3-pip nginx supervisor
+
+# Create application directory
+mkdir -p /var/www/pdf_library
+cd /var/www/pdf_library
+
+# Clone application repository
+git clone https://github.com/your-repo/pdf-library.git .
+
+# Install Python dependencies
+pip3 install -r requirements.txt
+
+# Setup virtual environment
+python3 -m venv venv
+source venv/bin/activate
+
+# Configure Nginx
+cat > /etc/nginx/sites-available/pdf_library << EOF
+server {
+    listen 80;
+    server_name your-domain.com;
+
+    location / {
+        proxy_pass http://127.0.0.1:8000;
+        proxy_set_header Host \$host;
+        proxy_set_header X-Real-IP \$remote_addr;
+    }
+}
+EOF
+
+# Enable site
+ln -s /etc/nginx/sites-available/pdf_library /etc/nginx/sites-enabled/
+
+# Configure Supervisor
+cat > /etc/supervisor/conf.d/pdf_library.conf << EOF
+[program:pdf_library]
+directory=/var/www/pdf_library
+command=/var/www/pdf_library/venv/bin/gunicorn app:app -w 4 -b 127.0.0.1:8000
+user=www-data
+autostart=true
+autorestart=true
+stderr_logfile=/var/log/pdf_library/err.log
+stdout_logfile=/var/log/pdf_library/out.log
+EOF
+
+# Create log directory
+mkdir -p /var/log/pdf_library
+
+# Start services
+systemctl restart nginx
+supervisorctl reread
+supervisorctl update
+                </code></pre>
+            </div>
+        </section>
+
+        <section id="security">
+            <h2>Security Considerations</h2>
+            <div class="warning">
+                <h3>Security Best Practices</h3>
+                <p>
+                    Security is a critical aspect of the PDF Library Framework. The implementation includes several security measures to protect both the system and its data:
+                </p>
+                <ul>
+                    <li>All file uploads are scanned for malware</li>
+                    <li>Access controls are enforced at both the API and storage levels</li>
+                    <li>All user sessions are encrypted and time-limited</li>
+                    <li>Regular security audits are performed on the codebase</li>
+                </ul>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Add smooth scrolling to navigation links
+        document.querySelectorAll('nav a').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                document.querySelector(targetId).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Highlight current section in navigation
+        window.addEventListener('scroll', () => {
+            const sections = document.querySelectorAll('section');
+            const navLinks = document.querySelectorAll('nav a');
+
+            let currentSection = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (pageYOffset >= sectionTop - 60) {
+                    currentSection = '#' + section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === currentSection) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html> 

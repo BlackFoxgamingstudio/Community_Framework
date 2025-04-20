@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RawFuelFoods - Plant Based Nutrition</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/nav-styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <style>
+    /* Enhanced Section Styles */
+    .section-container {
+      padding: 4rem 0;
+      background: #fff;
+    }
+
+    .section-container:nth-child(even) {
+      background: #f8f9fa;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    .hero {
+      background: linear-gradient(rgba(44, 62, 80, 0.9), rgba(44, 62, 80, 0.9)), url('hero_banner.png');
+      background-size: cover;
+      background-position: center;
+      color: white;
+      text-align: center;
+      padding: 8rem 0;
+      margin-bottom: 0;
+    }
+
+    .hero h1 {
+      font-size: 3.5rem;
+      margin-bottom: 1rem;
+      font-weight: 700;
+    }
+
+    .hero p {
+      font-size: 1.5rem;
+      max-width: 800px;
+      margin: 0 auto;
+      opacity: 0.9;
+    }
+
+    section h2 {
+      font-size: 2.5rem;
+      color: #2c3e50;
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+
+    section p {
+      font-size: 1.1rem;
+      line-height: 1.8;
+      color: #555;
+      margin-bottom: 1.5rem;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      padding: 4rem 0;
+    }
+
+    .feature {
+      background: white;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease;
+    }
+
+    .feature:hover {
+      transform: translateY(-5px);
+    }
+
+    .feature h3 {
+      font-size: 1.5rem;
+      color: #2c3e50;
+      margin-bottom: 1rem;
+    }
+
+    .site-footer {
+      background: #2c3e50;
+      color: white;
+      text-align: center;
+      padding: 2rem 0;
+      margin-top: 4rem;
+    }
+
+    .site-footer p {
+      margin: 0;
+      font-size: 1rem;
+    }
+
+    @media (max-width: 768px) {
+      .hero {
+        padding: 6rem 0;
+      }
+
+      .hero h1 {
+        font-size: 2.5rem;
+      }
+
+      .hero p {
+        font-size: 1.2rem;
+      }
+
+      section h2 {
+        font-size: 2rem;
+      }
+
+      .features {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="main-nav">
+    <div class="nav-brand">
+        <a href="/" class="logo">RawFuelFoods</a>
+        <button class="nav-toggle" aria-label="Toggle Navigation">
+            <span class="hamburger"></span>
+        </button>
+    </div>
+    
+    <ul class="nav-menu">
+        <li class="nav-item">
+            <a href="/about" class="nav-link">About & Contact</a>
+        </li>
+        <li class="nav-item">
+          <a href="/data-hub" class="nav-link active">Data Hub</a>
+      </li>
+        <li class="nav-item dropdown">
+            <a href="/farm" class="nav-link">Farms <i class="fas fa-chevron-down"></i></a>
+            <ul class="dropdown-menu">
+                <li><a href="/farms/locations">Locations</a></li>
+                <li><a href="/farms/products">Products</a></li>
+                <li><a href="/farms/sustainability">Sustainability</a></li>
+                <li><a href="/farms/partners">Partners</a></li>
+            </ul>
+        </li>
+       
+        <li class="nav-item dropdown">
+            <a href="/health-wellness" class="nav-link">Health/Wellness <i class="fas fa-chevron-down"></i></a>
+            <ul class="dropdown-menu">
+                <li><a href="/health-wellness/programs">Programs</a></li>
+                <li><a href="/health-wellness/nutrition">Nutrition</a></li>
+                <li><a href="/health-wellness/coaching">Coaching</a></li>
+                <li><a href="/health-wellness/resources">Resources</a></li>
+                <li><a href="/eat-drink/menu">Menu</a></li>
+                <li><a href="/eat-drink/specials">Daily Specials</a></li>
+                <li><a href="/eat-drink/catering">Catering</a></li>
+                <li><a href="/eat-drink/events">Events</a></li>
+            </ul>
+        </li>
+   
+       
+        <li class="nav-item dropdown">
+            <a href="/networks" class="nav-link">Networks <i class="fas fa-chevron-down"></i></a>
+            <ul class="dropdown-menu">
+                <li><a href="/networks/partners">Partners</a></li>
+                <li><a href="/networks/community">Community</a></li>
+                <li><a href="/networks/initiatives">Initiatives</a></li>
+                <a href="/communications" class="nav-link">Communications</a>
+                <li><a href="/events/calendar">Calendar</a></li>
+                <li><a href="/events/workshops">Workshops</a></li>
+                <li><a href="/events/classes">Classes</a></li>
+                <li><a href="/events/special">Special Events</a></li>
+                <a href="/outdoors-rx" class="nav-link">Outdoors RX</a>
+
+            </ul>
+        </li>
+     
+      
+        <li class="nav-item dropdown">
+          <a href="/pdf-library-docs" class="nav-link">Lib of kemet docs <i class="fas fa-chevron-down"></i></a>
+          <ul class="dropdown-menu">
+              <li><a href="/events/calendar">Calendar</a></li>
+              <li><a href="/events/workshops">Workshops</a></li>
+              <li><a href="/events/classes">Classes</a></li>
+              <li><a href="/events/special">Special Events</a></li>
+              <a href="/blog" class="nav-link">Blog</a>
+
+          </ul>
+      </li>
+        </ul>
+      
+      </nav>
+
+
+  <main class="main-content">
+    <section class="hero section-container">
+      <div class="container">
+
+        <h1>RawFuelFoods</h1>
+        <h4>Plant based nutrition for health conscious &amp; curious eaters</h4>
+        <h4>Empowering communities through sustainable urban farming and innovative food solutions that promote health, environmental stewardship, and local economic growth.</h4>
+      </div>
+    </section>
+
+    <section class="infofarm section-container">
+      <div class="container">
+        <img src="InfoFarm.png" alt="Aerial view of our urban farm showing raised beds, greenhouses and vertical growing systems" class="hero-image" style="width: 100%; max-height: 500px; object-fit: cover; margin-bottom: 2rem; border-radius: 8px;">
+        <h2>InfoFarm</h2>
+        <p>Advancing micro to small scale city farms as economic opportunity and food security. Our innovative approach combines traditional farming wisdom with cutting-edge technology to create sustainable urban agricultural systems that thrive in modern city environments.</p>
+        <p>Through careful planning and community engagement, we've developed scalable farming solutions that can be implemented in various urban settings, from rooftop gardens to vacant lots. Our methods not only produce fresh, nutritious food but also create meaningful employment opportunities and strengthen local food security networks.</p>
+      </div>
+    </section>
+
+    <section class="features section-container">
+      <div class="container">
+        <img src="FARMS Feature Panel.png" alt="Aerial view of our urban farm showing raised beds, greenhouses and vertical growing systems" class="hero-image" style="width: 100%; max-height: 500px; object-fit: cover; margin-bottom: 2rem; border-radius: 8px;">
+
+        <div class="feature">
+          <h3>FARMS</h3>
+          <p>Learn about our urban farm initiatives and how they benefit communities. Our network of city farms serves as living laboratories for sustainable agriculture practices and community engagement.</p>
+          <p>Each farm is designed to maximize productivity while minimizing environmental impact, incorporating innovative techniques such as vertical farming, aquaponics, and precision agriculture. We work closely with local communities to ensure our farms meet their specific needs and preferences.</p>
+        </div>
+
+        <img src="hero_banner.png" alt="Aerial view of our urban farm showing raised beds, greenhouses and vertical growing systems" class="hero-image" style="width: 100%; max-height: 500px; object-fit: cover; margin-bottom: 2rem; border-radius: 8px;">
+
+        <div class="feature">
+          <h3>EAT & DRINK</h3>
+          <p>Discover plant-based foods crafted for peak nutrition and taste. Our culinary team works directly with our farms to create seasonal menus that showcase the best of local produce while demonstrating the incredible potential of plant-based cuisine.</p>
+          <p>From farm-fresh salads to innovative plant-based proteins, our offerings are designed to nourish both body and soul. We believe that healthy eating should be both delicious and accessible, and our menu reflects this philosophy.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="data-hub section-container">
+      <div class="container">
+        <img src="farmyield.png" alt="Aerial view of our urban farm showing raised beds, greenhouses and vertical growing systems" class="hero-image" style="width: 100%; max-height: 500px; object-fit: cover; margin-bottom: 2rem; border-radius: 8px;">
+
+        <h2>DATA HUB</h2>
+        <p>Our comprehensive analytics platform transforms raw data from urban farms into actionable insights, enabling farmers to optimize crop yields, resource allocation, and sustainable practices. Through advanced monitoring systems and IoT sensors, we track key performance indicators including soil health, water usage efficiency, energy consumption, and crop productivity across different urban farming methods and locations.</p>
+        <p>Beyond operational metrics, our data hub provides valuable insights into the broader social and economic impact of urban farming initiatives. We analyze community engagement levels, measure food security improvements in local neighborhoods, and quantify the economic benefits generated through job creation and reduced food transportation costs. This data-driven approach helps stakeholders make informed decisions while demonstrating the tangible benefits of urban agriculture to community wellbeing and environmental sustainability.</p>
+      </div>
+    </section>
+
+    <section class="communications section-container">
+      <div class="container">
+        <img src="Networks.png" alt="Aerial view of our urban farm showing raised beds, greenhouses and vertical growing systems" class="hero-image" style="width: 100%; max-height: 500px; object-fit: cover; margin-bottom: 2rem; border-radius: 8px;">
+
+        <h2>COMMUNICATIONS</h2>
+        <p>Our educational content bridges the gap between urban farming innovation and community understanding. Through professionally produced webinars, detailed case studies, and engaging video resources, we make complex agricultural concepts accessible to everyone from beginners to experienced farmers.</p>
+        <p>We maintain an active knowledge-sharing platform where experts share their insights, success stories, and lessons learned. Our multimedia approach ensures that valuable information reaches diverse audiences, fostering a growing community of urban farming enthusiasts and practitioners.</p>
+      </div>
+    </section>
+
+    <section class="networks section-container">
+      <div class="container">
+        <img src="image.png" alt="Aerial view of our urban farm showing raised beds, greenhouses and vertical growing systems" class="hero-image" style="width: 100%; max-height: 500px; object-fit: cover; margin-bottom: 2rem; border-radius: 8px;">
+
+        <h2>NETWORKS</h2>
+        <p>Our digital community platform connects urban farmers, agricultural experts, and food enthusiasts across the globe. This vibrant network facilitates knowledge exchange, resource sharing, and collaborative problem-solving, creating a supportive ecosystem for urban agriculture innovation.</p>
+        <p>Through our network, members can access mentorship opportunities, participate in virtual workshops, and engage in meaningful discussions about the future of urban farming. We actively foster partnerships between farmers, researchers, and community organizations to accelerate the adoption of successful urban farming practices.</p>
+      </div>
+    </section>
+
+    <footer class="site-footer">
+      <div class="container">
+        <div class="footer-contact">
+          <p><i class="fas fa-phone"></i> <a href="tel:206.718.9951">206.718.9951</a> | <i class="fas fa-envelope"></i> <a href="mailto:rawfuelfoods@gmail.com">rawfuelfoods@gmail.com</a></p>
+        </div>
+      </div>
+    </footer>
+  </main>
+
+  <script src="js/nav.js"></script>
+</body>
+</html> 

@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{page_title}} - RawFuelFoods</title>
+  <style>
+    /* Base styles */
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      color: #333;
+    }
+
+    /* Layout */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    /* Header */
+    .site-header {
+      background: #fff;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: bold;
+      text-decoration: none;
+      color: #333;
+    }
+
+    .logo span {
+      color: #4CAF50;
+    }
+
+    /* Navigation */
+    .nav-toggle {
+      display: none;
+      background: none;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+    }
+
+    .nav-menu ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      gap: 20px;
+    }
+
+    .nav-menu a {
+      text-decoration: none;
+      color: #333;
+      padding: 10px;
+      transition: color 0.3s;
+    }
+
+    .nav-menu a:hover {
+      color: #4CAF50;
+    }
+
+    /* Main Content */
+    .main-content {
+      min-height: calc(100vh - 120px);
+      padding: 40px 0;
+    }
+
+    .page-header {
+      margin-bottom: 40px;
+    }
+
+    .page-header h1 {
+      margin: 0;
+      font-size: 36px;
+      color: #333;
+    }
+
+    .page-content {
+      margin-bottom: 60px;
+    }
+
+    /* Footer */
+    .site-footer {
+      text-align: center;
+      padding: 20px 0;
+      background: #f5f5f5;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .nav-toggle {
+        display: block;
+      }
+
+      .nav-menu {
+        display: none;
+      }
+
+      .nav-menu.active {
+        display: block;
+      }
+
+      .nav-menu ul {
+        flex-direction: column;
+        gap: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <a href="index.html" class="logo">RawFuel<span>Foods</span></a>
+      <button id="nav-toggle" class="nav-toggle">☰</button>
+      <nav id="nav-menu" class="nav-menu">
+        <ul>
+          <li><a href="about.html">About & Contact</a></li>
+          <li class="dropdown">
+            <a href="farm.html" class="dropdown-toggle">Farms</a>
+            <ul class="dropdown-menu">
+              <li><a href="farm-locations.html">Locations</a></li>
+              <li><a href="farm-products.html">Products</a></li>
+              <li><a href="farm-partners.html">Partners</a></li>
+            </ul>
+          </li>
+          <li class="dropdown">
+            <a href="food.html" class="dropdown-toggle">Eat & Drink</a>
+            <ul class="dropdown-menu">
+              <li><a href="menu.html">Menu</a></li>
+              <li><a href="recipes.html">Recipes</a></li>
+              <li><a href="catering.html">Catering</a></li>
+            </ul>
+          </li>
+          <li class="dropdown">
+            <a href="health.html" class="dropdown-toggle">Health/Wellness</a>
+            <ul class="dropdown-menu">
+              <li><a href="nutrition.html">Nutrition</a></li>
+              <li><a href="programs.html">Programs</a></li>
+              <li><a href="resources.html">Resources</a></li>
+            </ul>
+          </li>
+          <li><a href="data-hub.html">Data Hub</a></li>
+          <li><a href="communications.html">Communications</a></li>
+          <li><a href="networks.html">Networks</a></li>
+          <li class="dropdown">
+            <a href="blog.html" class="dropdown-toggle">Blog</a>
+            <ul class="dropdown-menu">
+              <li><a href="articles.html">Articles</a></li>
+              <li><a href="news.html">News</a></li>
+              <li><a href="stories.html">Stories</a></li>
+            </ul>
+          </li>
+          <li><a href="outdoors-rx.html">Outdoors RX</a></li>
+          <li><a href="events.html">Events</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <div class="page-header container">
+      <h1>{{page_title}}</h1>
+    </div>
+
+    <div class="page-content container">
+      {{page_content}}
+    </div>
+
+    <footer class="site-footer container">
+      <p>Call 206.718.9951 | rawfuelfoods@gmail.com</p>
+    </footer>
+  </main>
+
+  <script>
+    // Toggle mobile navigation menu
+    document.getElementById('nav-toggle').addEventListener('click', function() {
+      document.getElementById('nav-menu').classList.toggle('active');
+    });
+  </script>
+</body>
+</html> 
